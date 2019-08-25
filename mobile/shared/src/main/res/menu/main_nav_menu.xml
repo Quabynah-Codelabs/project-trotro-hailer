@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/nav_first_group"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@id/navigation_home"
+            android:icon="@drawable/ic_nav_home"
+            android:title="@string/title_home"
+            app:contentDescription="@string/title_home" />
+
+        <item
+            android:id="@id/navigation_trips"
+            android:contentDescription="@string/title_trips"
+            android:icon="@drawable/ic_nav_signpost"
+            android:title="@string/title_trips" />
+
+        <item
+            android:id="@id/navigation_settings"
+            android:icon="@drawable/ic_nav_settings"
+            android:title="@string/title_settings"
+            app:contentDescription="@string/title_settings" />
+
+        <item
+            android:id="@id/navigation_about"
+            android:icon="@drawable/ic_nav_info"
+            android:title="@string/title_about"
+            app:contentDescription="@string/title_about" />
+    </group>
+</menu>

@@ -33,7 +33,7 @@ fun FragmentActivity.intentTo(
 
 
 fun FirebaseUser.mapToPassenger(): Passenger = Passenger(
-    UUID.randomUUID().toString(),
+    uid,
     displayName ?: "No username",
     if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl,
     phoneNumber
@@ -41,7 +41,7 @@ fun FirebaseUser.mapToPassenger(): Passenger = Passenger(
 
 fun FirebaseUser.mapToDriver(): Driver =
     Driver(
-        UUID.randomUUID().toString(), displayName ?: "No username", "", "",
+        uid, displayName ?: "No username", "", "",
         if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl
     )
 

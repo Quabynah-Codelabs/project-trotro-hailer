@@ -9,9 +9,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.shared.base.BaseTrackingActivity
+import dev.trotrohailer.shared.databinding.HeaderViewBinding
 import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.result.Response
-import dev.trotrohailer.shared.result.succeeded
 import dev.trotrohailer.shared.util.Constants
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
@@ -50,11 +50,24 @@ class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
     private fun fetchAndSaveUser() {
         try {
             ioScope.launch {
-                val response = repo.getUser(auth.currentUser?.uid!!, false)
-                if (response.succeeded) {
-                    debugger("Current user: ${(response as Response.Success).data}")
-                } else {
-                    repo.saveUser(auth.currentUser!!.mapToPassenger())
+                when (val response =
+                    repo.getUser(auth.currentUser?.uid!!, hasNetworkConnection())) {
+                    is Response.Success -> {
+                        debugger("Current user: ${response.data}")
+                        uiScope.launch {
+                            HeaderViewBinding.inflate(layoutInflater).passenger = response.data
+                        }
+                        if (response.data == null) repo.saveUser(auth.currentUser!!.mapToPassenger())
+                    }
+
+                    is Response.Error -> {
+                        debugger("Error loading avatar: ${response.e.localizedMessage}")
+                        repo.saveUser(auth.currentUser!!.mapToPassenger())
+                    }
+
+                    is Response.Loading -> {
+                        debugger("Loading user avatar")
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -64,7 +77,7 @@ class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map?.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.backup_map_style))
+        map?.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_uberx))
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
     }

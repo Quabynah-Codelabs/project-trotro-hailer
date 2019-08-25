@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="passenger"
+            type="dev.trotrohailer.shared.data.Passenger" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/onboarding_animation_padding"
+        android:padding="@dimen/padding_normal">
+
+        <ImageView
+            android:id="@+id/user_avatar"
+            app:avatar="@{passenger.avatar}"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:src="@drawable/ic_default_avatar_2" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="?alphaHigh"
+                android:text="@{passenger.name}"
+                android:fontFamily="@font/google_sans_medium"
+                android:textAppearance="?textAppearanceHeadline6"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="?alphaDisabled"
+                android:fontFamily="@font/google_sans"
+                android:text="@string/default_app_name_passenger"
+                android:textAppearance="?textAppearanceBody2" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

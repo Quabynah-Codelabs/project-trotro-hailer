@@ -1,6 +1,7 @@
 package dev.trotrohailer.shared.base
 
-import android.os.Bundle
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,11 +12,12 @@ open class BaseActivity : AppCompatActivity() {
     val ioScope = CoroutineScope(Dispatchers.IO)
     val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    open fun hasNetworkConnection(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
-
 
     override fun onDestroy() {
         job.cancel()

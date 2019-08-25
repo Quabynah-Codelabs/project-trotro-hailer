@@ -2,9 +2,11 @@ package dev.trotrohailer.shared.data
 
 import android.net.Uri
 import android.os.Parcelable
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.firebase.auth.FirebaseUser
+import dev.trotrohailer.shared.glide.load
 import dev.trotrohailer.shared.util.Constants
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -42,3 +44,9 @@ data class Driver(
     constructor() : this("", "", "", "")
 }
 
+
+object BindingAdapters {
+    @JvmStatic
+    @BindingAdapter("app:avatar")
+    fun loadCircleAvatar(imageView: ImageView, url: Uri?) = imageView.load(url, circleCrop = true)
+}

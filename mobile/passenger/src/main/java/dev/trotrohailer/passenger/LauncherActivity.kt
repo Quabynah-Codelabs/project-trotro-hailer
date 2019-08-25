@@ -17,7 +17,6 @@ import org.koin.android.ext.android.get
 class LauncherActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_launcher)
 
         // Firebase auth instance
         val auth: FirebaseAuth = get()
