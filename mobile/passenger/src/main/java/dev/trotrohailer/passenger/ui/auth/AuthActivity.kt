@@ -91,7 +91,7 @@ class AuthActivity : BaseActivity() {
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        debugger("Logging in with account: ${acct.idToken}")
+        debugger("Logging in with email: ${acct.email}")
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
 
         // Get auth instance

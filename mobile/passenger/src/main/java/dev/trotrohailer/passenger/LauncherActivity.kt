@@ -21,13 +21,12 @@ class LauncherActivity : BaseActivity() {
 
         // Firebase auth instance
         val auth: FirebaseAuth = get()
-
         ioScope.launch {
             delay(850)
             intentTo(
-                /*if (auth.currentUser == null) AuthActivity::class.java else MapsActivity::class.java*/
-                AuthActivity::class.java
-                , true)
+                if (auth.currentUser == null) AuthActivity::class.java else MapsActivity::class.java,
+                true
+            )
         }
     }
 
