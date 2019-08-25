@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/driver" />
+            <option value="$PROJECT_DIR$/passenger" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

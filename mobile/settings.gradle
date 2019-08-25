@@ -1,2 +1,2 @@
-include ':driver'
+include ':driver', ':passenger'
 rootProject.name='Trotro Hailer'
