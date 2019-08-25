@@ -3,14 +3,18 @@ package dev.trotrohailer.shared.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
-import dev.trotrohailer.shared.data.Passenger
+import dev.trotrohailer.shared.data.Driver
 
 @Dao
-interface PassengerDao : BaseDao<Passenger> {
+interface DriverDao : BaseDao<Driver> {
 
-    @Query("SELECT * FROM passengers WHERE id = :id")
-    fun getPassenger(id: String): LiveData<Passenger>
+    @Query("SELECT * FROM drivers WHERE id = :id")
+    fun getDriver(id: String): LiveData<Driver>
 
-    @Query("SELECT * FROM passengers WHERE id = :id")
-    fun getPassengerAsync(id: String): Passenger
+    @Query("SELECT * FROM drivers WHERE id = :id")
+    fun getDriverAsync(id: String): Driver
+
+    @Query("SELECT * FROM drivers")
+    fun getAllDrivers(): LiveData<MutableList<Driver>>
+
 }
