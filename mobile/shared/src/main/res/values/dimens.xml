@@ -12,5 +12,5 @@
     <dimen name="button_marginLeft">60dip</dimen>
     <dimen name="button_marginRight">60dip</dimen>
     <dimen name="button_marginTop">30dip</dimen>
-    <dimen name="button_marginBottom">30dip</dimen>
+    <dimen name="button_marginBottom">60dip</dimen>
 </resources>
