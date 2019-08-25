@@ -19,5 +19,5 @@ interface BaseDao<R> {
     fun deleteAll(items: MutableList<R>)
 
     @Delete
-    fun delete(items: MutableList<R>)
+    fun delete(item: R)
 }

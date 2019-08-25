@@ -12,16 +12,24 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import dev.trotrohailer.passenger.ui.home.MapsActivity
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.databinding.ActivityAuthBinding
+import dev.trotrohailer.shared.datasource.PassengerRepository
+import dev.trotrohailer.shared.util.Constants
 import dev.trotrohailer.shared.util.debugger
+import dev.trotrohailer.shared.util.intentTo
+import dev.trotrohailer.shared.util.mapToPassenger
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import dev.trotrohailer.passenger.R as appR
 import dev.trotrohailer.shared.R as sharedR
 
 class AuthActivity : BaseActivity() {
+    private val repo by inject<PassengerRepository>(named(Constants.PASSENGERS))
     private lateinit var binding: ActivityAuthBinding
-    private val auth by inject<FirebaseAuth>()
     private val snackbar by lazy {
         Snackbar.make(
             binding.coordinatorLayout,
@@ -41,7 +49,7 @@ class AuthActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, sharedR.layout.activity_auth)
-        
+
         binding.btLogin.setOnClickListener {
             startGoogleAuth()
         }
@@ -85,6 +93,11 @@ class AuthActivity : BaseActivity() {
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         debugger("Logging in with account: ${acct.idToken}")
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
+        // Get auth instance
+        val auth: FirebaseAuth = get()
+
+        // Sign in user
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -105,7 +118,13 @@ class AuthActivity : BaseActivity() {
         if (firebaseUser == null) {
             debugger("Firebase user could not be created")
         } else {
-            // todo: store user information locally
+            snackbar.setText("Saving user information").show()
+            ioScope.launch {
+                repo.saveUser(firebaseUser.mapToPassenger())
+                uiScope.launch {
+                    intentTo(MapsActivity::class.java, true)
+                }
+            }
         }
     }
 

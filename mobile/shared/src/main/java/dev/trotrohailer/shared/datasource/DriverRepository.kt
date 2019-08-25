@@ -2,9 +2,11 @@ package dev.trotrohailer.shared.datasource
 
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.database.DriverDao
 import dev.trotrohailer.shared.result.Response
+import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.driverDocument
 import dev.trotrohailer.shared.util.drivers
 import kotlinx.coroutines.Dispatchers
@@ -47,4 +49,37 @@ class DriverRepository constructor(
             }
 
         }
+
+    override suspend fun saveUser(user: Driver) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.driverDocument(user.id).set(user, SetOptions.merge()))
+            driverDao.insert(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
+
+    override suspend fun updateUser(user: Driver) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.driverDocument(user.id).set(user, SetOptions.merge()))
+            driverDao.update(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
+
+    override suspend fun deleteUser(user: Driver) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.driverDocument(user.id).delete())
+            driverDao.delete(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
 }
