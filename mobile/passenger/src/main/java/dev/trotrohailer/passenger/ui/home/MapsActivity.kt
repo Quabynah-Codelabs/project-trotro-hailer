@@ -1,4 +1,4 @@
-package dev.trotrohailer.passenger
+package dev.trotrohailer.passenger.ui.home
 
 import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -8,12 +8,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
-import com.hypertrack.sdk.HyperTrack
-import com.hypertrack.sdk.TrackingInitDelegate
-import com.hypertrack.sdk.TrackingInitError
-import dev.trotrohailer.shared.base.BaseActivity
+import dev.trotrohailer.passenger.R
+import dev.trotrohailer.shared.base.BaseTrackingActivity
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback, TrackingInitDelegate {
+class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,24 +25,17 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, TrackingInitDelegate {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_uberx))
+        mMap.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                this,
+                R.raw.mapstyle_uberx
+            )
+        )
 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18.0f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15.0f))
 
-        //HyperTrack.startTracking(true, this)
-    }
-
-
-
-    override fun onSuccess() {
-        println("TroTro ==> Tracking started")
-    }
-
-    override fun onError(error: TrackingInitError) {
-        println("TroTro ==> Error while tracking: ${error.localizedMessage}")
     }
 }

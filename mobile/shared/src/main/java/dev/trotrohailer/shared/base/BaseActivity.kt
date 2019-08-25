@@ -2,15 +2,23 @@ package dev.trotrohailer.shared.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.hypertrack.sdk.HyperTrack
-import dev.trotrohailer.shared.BuildConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 open class BaseActivity : AppCompatActivity() {
+    private val job = Job()
+    val ioScope = CoroutineScope(Dispatchers.IO)
+    val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize HyperTrack for activity
-        HyperTrack.initialize(this, BuildConfig.HYPER_TRACK_PUB_KEY)
+    }
+
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 }

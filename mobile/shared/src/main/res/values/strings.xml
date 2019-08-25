@@ -1,3 +1,29 @@
 <resources>
+    <string name="default_app_name">TroTro© for Driver</string>
+    <string name="default_app_name_passenger">TroTro© for Passengers</string>
     <string name="app_name">shared</string>
+    <string name="welcome">Welcome to</string>
+    <string name="login">Get started</string>
+
+
+    <string name="network_error">Oops! No internet connection… </string>
+    <string name="enable_location_settings">Please provide location permission </string>
+    <string name="location_permission_denied_error">Please provide Location Permission for functioning of ConsumerApp</string>
+
+    <string name="book_ride">BOOK RIDE</string>
+    <string name="book_another_ride">BOOK ANOTHER RIDE</string>
+    <string name="find_driver">Connecting you to nearest driver</string>
+    <string name="amount">$%1$s</string>
+    <string name="estimated_fare">Estimated Fare</string>
+    <string name="share_trip">Share Trip</string>
+
+    <string name="hint_name">Enter your name</string>
+    <string name="hint_phone">Enter your mobile number</string>
+    <string name="submit">Submit</string>
+    <string name="select_place_title">Where do you want to go?</string>
+    <string name="fetching_profile_details">Fetching your saved profile details</string>
+    <string name="update_profile_details">Edit/ update profile details</string>
+    <string name="no_data">--</string>
+    <string name="enter_pickup_location">Enter your pickup location</string>
+    <string name="no_cars_available">No cars available</string>
 </resources>
