@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import dev.trotrohailer.passenger.ui.auth.AuthActivity
 import dev.trotrohailer.shared.base.BaseActivity
+import dev.trotrohailer.shared.database.PassengerDao
 import dev.trotrohailer.shared.util.debugger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,12 +16,14 @@ import org.koin.android.ext.android.inject
  * No layout needed
  */
 class LauncherActivity : BaseActivity() {
+    private val passengerDao by inject<PassengerDao>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
 
         ioScope.launch {
+            //passengerDao.getPassenger()
             debugger("Current user: ${inject<FirebaseAuth>().value.currentUser}")
         }
 
