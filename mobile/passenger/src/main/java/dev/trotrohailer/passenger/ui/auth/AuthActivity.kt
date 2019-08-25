@@ -31,14 +31,17 @@ class AuthActivity : BaseActivity() {
     }
 
     // Sign in options for Google Auth
-    private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestEmail()
-        .requestIdToken(getString(appR.string.default_web_client_id))
-        .build()
+    private val gso by lazy {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(getString(appR.string.default_web_client_id))
+            .build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, sharedR.layout.activity_auth)
+        
         binding.btLogin.setOnClickListener {
             startGoogleAuth()
         }
