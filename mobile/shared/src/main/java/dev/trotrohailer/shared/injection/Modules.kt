@@ -9,7 +9,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 /**
- * Firebase DSL
+ * Remote database DSL
  */
 val firebaseModule = module {
     single { FirebaseAuth.getInstance() }
@@ -18,6 +18,9 @@ val firebaseModule = module {
     single { FirebaseDatabase.getInstance() }
 }
 
+/**
+ * Local database DSL
+ */
 val databaseModule = module {
     single { AppDatabase.get(androidContext()) }
     single { get<AppDatabase>().driverDao() }
