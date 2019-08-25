@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply from: 'https://raw.githubusercontent.com/passsy/gradle-GitVersioner/master/git-versioner.gradle'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -10,9 +13,10 @@ android {
         applicationId "dev.trotrohailer.passenger"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        versionCode gitVersion.version
+        versionName gitVersionName
+        archivesBaseName = "passenger"
+        manifestPlaceholders += [google_maps_api_key:"\"${google_maps_key}\""]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -22,6 +26,42 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/core_debug.kotlin_module'
+        exclude 'META-INF/core_release.kotlin_module'
+    }
+    lintOptions {
+        // If set to true, turns off analysis progress reporting by lint.
+        quiet true
+        // if set to true (default), stops the build if errors are found.
+        abortOnError false
+        // if true, only report errors.
+        ignoreWarnings true
+        // Eliminates UnusedResources false positives for resources used in DataBinding layouts
+        checkGeneratedSources = true
+        // Running lint over the debug variant is enough
+        checkReleaseBuilds false
+        disable 'MissingDefaultResource', "InvalidPackage", "MissingTranslation"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+
 
 }
 
@@ -34,3 +74,4 @@ dependencies {
 
     implementation project(":shared")
 }
+apply plugin: 'com.google.gms.google-services'

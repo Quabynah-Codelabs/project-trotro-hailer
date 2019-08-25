@@ -1,7 +1,6 @@
 package dev.trotrohailer.passenger
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -9,9 +8,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.hypertrack.sdk.HyperTrack
+import com.hypertrack.sdk.TrackingInitDelegate
+import com.hypertrack.sdk.TrackingInitError
+import dev.trotrohailer.shared.base.BaseActivity
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
+class MapsActivity : BaseActivity(), OnMapReadyCallback, TrackingInitDelegate {
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,23 +25,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_day))
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_uberx))
 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18.0f))
+
+        //HyperTrack.startTracking(true, this)
+    }
+
+
+
+    override fun onSuccess() {
+        println("TroTro ==> Tracking started")
+    }
+
+    override fun onError(error: TrackingInitError) {
+        println("TroTro ==> Error while tracking: ${error.localizedMessage}")
     }
 }

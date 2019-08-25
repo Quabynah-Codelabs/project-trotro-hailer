@@ -1,0 +1,31 @@
+dependencies {
+    // Application
+    api 'androidx.appcompat:appcompat:1.1.0-rc01'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
+    api 'androidx.browser:browser:1.2.0-alpha07'
+    api 'androidx.core:core-ktx:1.2.0-alpha03'
+    api 'com.google.android.material:material:1.1.0-alpha09'
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Koin DSL
+    def koin_version = "2.0.1"
+    api "org.koin:koin-android:$koin_version"
+    api "org.koin:koin-androidx-scope:$koin_version"
+    api "org.koin:koin-androidx-viewmodel:$koin_version"
+
+    // Coroutines
+    def coroutine_version = '1.3.0-RC2'
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+
+    // Glide
+    def glide_version = "4.9.0"
+    api "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    api("com.github.bumptech.glide:recyclerview-integration:$glide_version") {
+        transitive = false
+    }
+
+    // Play Core (for dynamic feature modules)
+    api 'com.google.android.play:core:1.6.1'
+}

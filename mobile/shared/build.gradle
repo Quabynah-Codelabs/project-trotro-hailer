@@ -2,6 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply from: '../aac.gradle'
+apply from: '../app.gradle'
+apply from: '../location.gradle'
+apply from: '../firebase.gradle'
+apply from: 'https://raw.githubusercontent.com/passsy/gradle-GitVersioner/master/git-versioner.gradle'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -10,11 +16,16 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode gitVersion.version
+        versionName gitVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField("String","HYPER_TRACK_PUB_KEY","\"${pub_key}\"")
+        buildConfigField("String","HYPER_TRACK_ACCT_ID","\"${acct_id}\"")
+        buildConfigField("String","HYPER_TRACK_ACCT_SECRET","\"${acct_secret}\"")
+        buildConfigField("String","HYPER_TRACK_FCM","\"${fcm_key}\"")
     }
 
     buildTypes {
@@ -29,8 +40,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
 
-    api 'com.google.firebase:firebase-analytics:17.1.0'
+    // HyperTrack
+    api 'com.hypertrack:hypertrack:3.3.1'
 }

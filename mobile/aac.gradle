@@ -1,0 +1,28 @@
+dependencies {
+    // room
+    def room_version = "2.2.0-alpha02"
+    api "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    api "androidx.room:room-ktx:$room_version"
+
+    //worker
+    def work_version = "2.1.0"
+    api "androidx.work:work-runtime-ktx:$work_version"
+
+    //lifecycle
+    def lifecycle_version = '2.2.0-alpha03'
+    api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // navigation
+    def nav_version = "2.1.0-rc01"
+    api "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    api "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // KTX
+    def activity_ktx_version = " 1.1.0-alpha02"
+    api "androidx.activity:activity-ktx:$activity_ktx_version"
+    def fragment_ktx_version = "1.2.0-alpha02"
+    api "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+}

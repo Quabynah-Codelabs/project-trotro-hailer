@@ -1,0 +1,11 @@
+dependencies {
+// Play Services
+    def google = "17.0.0"
+    api "com.google.android.gms:play-services-maps:$google"
+    api "com.google.android.gms:play-services-location:$google"
+
+    def map_utils = "0.5"
+    api("com.google.maps.android:android-maps-utils:$map_utils") {
+        exclude group: "com.google.android.gms"
+    }
+}
