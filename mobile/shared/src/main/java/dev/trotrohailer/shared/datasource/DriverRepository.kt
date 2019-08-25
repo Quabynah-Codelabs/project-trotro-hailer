@@ -23,6 +23,7 @@ class DriverRepository constructor(
                 try {
                     val driver =
                         Tasks.await(db.driverDocument(id).get()).toObject(Driver::class.java)
+                    if (driver != null) driverDao.insert(driver)
                     return@withContext Response.Success(driver)
                 } catch (e: Exception) {
                     return@withContext Response.Error(e)
@@ -39,7 +40,11 @@ class DriverRepository constructor(
                     return@withContext Response.Success(
                         Tasks.await(db.drivers().get()).toObjects(
                             Driver::class.java
-                        )
+                        ).apply {
+                            if (this.isNotEmpty()) {
+                                driverDao.insertAll(this)
+                            }
+                        }
                     )
                 } catch (e: Exception) {
                     return@withContext Response.Error(e)

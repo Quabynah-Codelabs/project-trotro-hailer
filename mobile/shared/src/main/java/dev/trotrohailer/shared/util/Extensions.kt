@@ -3,6 +3,7 @@ package dev.trotrohailer.shared.util
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.core.text.trimmedLength
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,12 +33,17 @@ fun FragmentActivity.intentTo(
 
 
 fun FirebaseUser.mapToPassenger(): Passenger = Passenger(
-    UUID.randomUUID().toString(), displayName ?: "No username",
-    photoUrl, phoneNumber
+    UUID.randomUUID().toString(),
+    displayName ?: "No username",
+    if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl,
+    phoneNumber
 )
 
 fun FirebaseUser.mapToDriver(): Driver =
-    Driver(UUID.randomUUID().toString(), displayName ?: "No username", "", "", photoUrl)
+    Driver(
+        UUID.randomUUID().toString(), displayName ?: "No username", "", "",
+        if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl
+    )
 
 object Constants {
     const val PASSENGERS = "passengers"

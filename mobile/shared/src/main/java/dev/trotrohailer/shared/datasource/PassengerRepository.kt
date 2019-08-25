@@ -23,6 +23,7 @@ class PassengerRepository constructor(
                 try {
                     val passenger =
                         Tasks.await(db.passengerDocument(id).get()).toObject(Passenger::class.java)
+                    if (passenger != null) passengerDao.insert(passenger)
                     return@withContext Response.Success(passenger)
                 } catch (e: Exception) {
                     return@withContext Response.Error(e)
@@ -39,7 +40,11 @@ class PassengerRepository constructor(
                     return@withContext Response.Success(
                         Tasks.await(db.passengers().get()).toObjects(
                             Passenger::class.java
-                        )
+                        ).apply {
+                            if (this.isNotEmpty()) {
+                                passengerDao.insertAll(this)
+                            }
+                        }
                     )
                 } catch (e: Exception) {
                     return@withContext Response.Error(e)
