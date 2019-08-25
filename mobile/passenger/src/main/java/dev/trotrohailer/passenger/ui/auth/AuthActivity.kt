@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import dev.trotrohailer.passenger.ui.home.MapsActivity
+import dev.trotrohailer.passenger.ui.home.MainActivity
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.databinding.ActivityAuthBinding
 import dev.trotrohailer.shared.datasource.PassengerRepository
@@ -122,7 +122,7 @@ class AuthActivity : BaseActivity() {
             ioScope.launch {
                 repo.saveUser(firebaseUser.mapToPassenger())
                 uiScope.launch {
-                    intentTo(MapsActivity::class.java, true)
+                    intentTo(MainActivity::class.java, true)
                 }
             }
         }

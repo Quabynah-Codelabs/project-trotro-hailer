@@ -16,7 +16,7 @@ android {
         versionCode gitVersion.version
         versionName gitVersionName
         archivesBaseName = "passenger"
-        manifestPlaceholders += [google_maps_api_key:"\"${google_maps_key}\""]
+        manifestPlaceholders += [google_maps_api_key: "\"${google_maps_key}\""]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,7 +62,6 @@ android {
     }
 
 
-
 }
 
 dependencies {
@@ -73,5 +72,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation project(":shared")
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

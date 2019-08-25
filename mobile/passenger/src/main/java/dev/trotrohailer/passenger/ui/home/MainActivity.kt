@@ -1,10 +1,6 @@
 package dev.trotrohailer.passenger.ui.home
 
 import android.os.Bundle
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
@@ -14,22 +10,18 @@ import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.result.Response
 import dev.trotrohailer.shared.util.Constants
 import dev.trotrohailer.shared.util.debugger
-import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 import dev.trotrohailer.shared.util.mapToPassenger
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
-class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
+class MainActivity : BaseTrackingActivity() {
     private val repo by inject<PassengerRepository>(named(Constants.PASSENGERS))
     private val auth by inject<FirebaseAuth>()
-    private val customMap by lazy { MyLocationGoogleMap(this) }
-
-    private var map: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.activity_main)
 
         HyperTrack.addNotificationIconsAndTitle(
             dev.trotrohailer.shared.R.drawable.fake_car,
@@ -40,11 +32,6 @@ class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
             "You are currently visible to all drivers in your vicinity"
         )
         fetchAndSaveUser()
-
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
-
     }
 
     private fun fetchAndSaveUser() {
@@ -75,15 +62,5 @@ class MapsActivity : BaseTrackingActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map?.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_uberx))
-        customMap.addTo(map)
-        customMap.moveToMyLocation(map)
-    }
 
-    override fun onDestroy() {
-        if (map != null) this.customMap.removeFrom(map)
-        super.onDestroy()
-    }
 }
