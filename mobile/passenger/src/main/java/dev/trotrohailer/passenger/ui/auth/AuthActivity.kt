@@ -80,7 +80,7 @@ class AuthActivity : BaseActivity() {
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        debugger("Loggin in with account: ${acct.idToken}")
+        debugger("Logging in with account: ${acct.idToken}")
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
