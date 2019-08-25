@@ -26,6 +26,14 @@ android {
         buildConfigField("String","HYPER_TRACK_ACCT_ID","\"${acct_id}\"")
         buildConfigField("String","HYPER_TRACK_ACCT_SECRET","\"${acct_secret}\"")
         buildConfigField("String","HYPER_TRACK_FCM","\"${fcm_key}\"")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation": "$projectDir/schemas".toString()
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -35,6 +43,22 @@ android {
         }
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
@@ -43,4 +67,12 @@ dependencies {
 
     // HyperTrack
     api 'com.hypertrack:hypertrack:3.3.1'
+}
+
+kapt {
+    useBuildCache = true
+}
+
+androidExtensions {
+    experimental = true
 }
