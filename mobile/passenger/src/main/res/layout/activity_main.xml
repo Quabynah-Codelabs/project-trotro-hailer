@@ -14,7 +14,6 @@
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             tools:openDrawer="start">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -37,11 +36,25 @@
                 </com.google.android.material.appbar.AppBarLayout>
 
                 <FrameLayout
+                    android:id="@+id/content_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+                    <fragment
+                        android:id="@+id/nav_host_fragment"
+                        android:name="dev.trotrohailer.passenger.util.DispatchInsetsNavHostFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:defaultNavHost="true"
+                        app:navGraph="@navigation/nav_graph" />
 
+                    <View
+                        android:id="@+id/status_bar_scrim"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@color/status_bar_scrim" />
 
                 </FrameLayout>
 
@@ -49,11 +62,11 @@
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_view"
+                style="@style/Widget.IOSched.NavigationView"
                 android:layout_width="280dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:fitsSystemWindows="true"
-                style="@style/Widget.IOSched.NavigationView"
                 app:headerLayout="@layout/header_view"
                 app:menu="@menu/main_nav_menu" />
 

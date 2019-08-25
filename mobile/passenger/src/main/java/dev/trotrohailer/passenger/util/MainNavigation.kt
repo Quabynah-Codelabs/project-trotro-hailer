@@ -21,7 +21,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import dev.trotrohailer.shared.R
+import dev.trotrohailer.passenger.R
 
 /**
  * To be implemented by components that host top-level navigation destinations.
