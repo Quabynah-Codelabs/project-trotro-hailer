@@ -27,28 +27,3 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
 }
-
-/**
- * Converter for [Uri] to [String] with user avatars
- */
-object UriTypeConverter {
-
-    @TypeConverter
-    fun uriToString(uri: Uri?): String? = uri.toString()
-
-    @TypeConverter
-    fun stringToUri(string: String?): Uri? = string?.toUri()
-
-
-    @TypeConverter
-    fun coodinateToString(coordinate: Coordinate): String =
-        "${coordinate.latitude},${coordinate.longitude}"
-
-    @TypeConverter
-    fun stringToCoordinate(string: String): Coordinate = if (string.isEmpty()) Coordinate.EMPTY else
-        Coordinate(
-            string.substring(0, string.indexOf(',').minus(1)).toDouble(),
-            string.substring(string.indexOf(',').plus(1), string.length).toDouble()
-        )
-
-}

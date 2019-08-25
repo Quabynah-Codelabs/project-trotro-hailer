@@ -3,8 +3,7 @@ package dev.trotrohailer.shared
 import android.app.Application
 import com.google.firebase.FirebaseApp
 import dev.trotrohailer.shared.BuildConfig.DEBUG
-import dev.trotrohailer.shared.injection.databaseModule
-import dev.trotrohailer.shared.injection.firebaseModule
+import dev.trotrohailer.shared.injection.loadModules
 import dev.trotrohailer.shared.util.debugger
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,7 +20,7 @@ class TrotroHailerApp : Application() {
         startKoin {
             androidContext(this@TrotroHailerApp)
             androidLogger(if (DEBUG) Level.DEBUG else Level.INFO)
-            modules(mutableListOf(firebaseModule, databaseModule))
+            modules(loadModules())
         }
 
     }

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.trotrohailer.shared.util.Constants
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -11,7 +12,7 @@ interface User : Parcelable {
     val id: String
 }
 
-@Entity(tableName = "passengers")
+@Entity(tableName = Constants.PASSENGERS)
 @Parcelize
 data class Passenger(
     @PrimaryKey
@@ -27,7 +28,7 @@ data class Passenger(
     constructor() : this("", "")
 }
 
-@Entity(tableName = "drivers")
+@Entity(tableName = Constants.DRIVERS)
 @Parcelize
 data class Driver(
     @PrimaryKey

@@ -17,4 +17,7 @@ interface DriverDao : BaseDao<Driver> {
     @Query("SELECT * FROM drivers")
     fun getAllDrivers(): LiveData<MutableList<Driver>>
 
+    @Query("SELECT * FROM drivers")
+    fun getAllDriversAsync(): MutableList<Driver>
+
 }

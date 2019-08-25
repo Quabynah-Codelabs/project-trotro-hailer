@@ -13,4 +13,8 @@ interface PassengerDao : BaseDao<Passenger> {
 
     @Query("SELECT * FROM passengers WHERE id = :id")
     fun getPassengerAsync(id: String): Passenger
+
+    @Query("SELECT * FROM passengers")
+    fun getPassengers(): MutableList<Passenger>
+
 }
