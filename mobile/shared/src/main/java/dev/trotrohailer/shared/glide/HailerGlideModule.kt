@@ -10,6 +10,9 @@ import dev.trotrohailer.shared.R
 @GlideModule
 open class HailerGlideModule : AppGlideModule()
 
+/**
+ * Load avatar for user's dynamically
+ */
 fun ImageView.load(uri: Uri?, circleCrop: Boolean = true) = GlideApp.with(context)
     .asBitmap()
     .load(uri.toString())
@@ -18,6 +21,9 @@ fun ImageView.load(uri: Uri?, circleCrop: Boolean = true) = GlideApp.with(contex
             circleCrop()
                 .placeholder(R.drawable.avatar_placeholder)
                 .error(R.drawable.avatar_placeholder)
+        } else {
+            placeholder(R.color.avatar_content_color)
+                .error(R.color.avatar_content_color)
         }
     }
     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)

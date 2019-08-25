@@ -23,4 +23,5 @@
     <color name="info_box_destination">@color/text_color</color>
     <color name="tracking_experience">@color/text_color</color>
     <color name="transparent">#00ffffff</color>
+    <color name="avatar_content_color">#EEEEEE</color>
 </resources>
