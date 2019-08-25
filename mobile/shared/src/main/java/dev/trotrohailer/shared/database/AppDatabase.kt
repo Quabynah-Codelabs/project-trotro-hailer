@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.*
+import dev.trotrohailer.shared.data.Coordinate
 import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.data.Passenger
 
@@ -38,5 +39,16 @@ object UriTypeConverter {
     @TypeConverter
     fun stringToUri(string: String?): Uri? = string?.toUri()
 
+
+    @TypeConverter
+    fun coodinateToString(coordinate: Coordinate): String =
+        "${coordinate.latitude},${coordinate.longitude}"
+
+    @TypeConverter
+    fun stringToCoordinate(string: String): Coordinate = if (string.isEmpty()) Coordinate.EMPTY else
+        Coordinate(
+            string.substring(0, string.indexOf(',').minus(1)).toDouble(),
+            string.substring(string.indexOf(',').plus(1), string.length).toDouble()
+        )
 
 }
