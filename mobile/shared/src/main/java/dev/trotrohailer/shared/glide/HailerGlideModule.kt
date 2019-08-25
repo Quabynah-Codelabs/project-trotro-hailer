@@ -5,3 +5,4 @@ import com.bumptech.glide.module.AppGlideModule
 
 @GlideModule
 open class HailerGlideModule : AppGlideModule()
+

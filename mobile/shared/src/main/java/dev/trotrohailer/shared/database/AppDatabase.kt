@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.*
+import dev.trotrohailer.shared.data.Driver
+import dev.trotrohailer.shared.data.Passenger
 
 @TypeConverters(UriTypeConverter::class)
-@Database(entities = [], version = 1, exportSchema = true)
+@Database(entities = [Passenger::class, Driver::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun passengerDao(): PassengerDao
@@ -25,6 +27,9 @@ abstract class AppDatabase : RoomDatabase() {
 
 }
 
+/**
+ * Converter for [Uri] to [String] with user avatars
+ */
 object UriTypeConverter {
 
     @TypeConverter
