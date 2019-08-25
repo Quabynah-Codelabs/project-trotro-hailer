@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.auth.FirebaseUser
 import dev.trotrohailer.shared.util.Constants
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -40,3 +41,4 @@ data class Driver(
 ) : User {
     constructor() : this("", "", "", "")
 }
+

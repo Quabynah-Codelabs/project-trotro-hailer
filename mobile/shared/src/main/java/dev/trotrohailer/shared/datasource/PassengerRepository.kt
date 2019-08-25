@@ -2,9 +2,11 @@ package dev.trotrohailer.shared.datasource
 
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import dev.trotrohailer.shared.data.Passenger
 import dev.trotrohailer.shared.database.PassengerDao
 import dev.trotrohailer.shared.result.Response
+import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.passengerDocument
 import dev.trotrohailer.shared.util.passengers
 import kotlinx.coroutines.Dispatchers
@@ -47,4 +49,37 @@ class PassengerRepository constructor(
             }
 
         }
+
+    override suspend fun saveUser(user: Passenger) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.passengerDocument(user.id).set(user, SetOptions.merge()))
+            passengerDao.insert(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
+
+    override suspend fun updateUser(user: Passenger) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.passengerDocument(user.id).set(user, SetOptions.merge()))
+            passengerDao.update(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
+
+    override suspend fun deleteUser(user: Passenger) = withContext(Dispatchers.IO) {
+        try {
+            Tasks.await(db.passengerDocument(user.id).delete())
+            passengerDao.delete(user)
+            null
+        } catch (e: Exception) {
+            debugger(e.localizedMessage)
+            null
+        }
+    }
 }
