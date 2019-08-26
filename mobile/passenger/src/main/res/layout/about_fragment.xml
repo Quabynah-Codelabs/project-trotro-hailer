@@ -61,7 +61,7 @@
                 android:fontFamily="@font/google_sans_medium"
                 android:gravity="center"
                 android:padding="@dimen/spacing_normal"
-                android:text="@{BuildConfig.VERSION_NAME, default=`Version 123-009`}"
+                android:text="@{String.format(`Version %s`,BuildConfig.VERSION_NAME), default=`Version 123-009`}"
                 android:textAppearance="?textAppearanceHeadline6" />
 
             <TextView
