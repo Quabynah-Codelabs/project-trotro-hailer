@@ -1,5 +1,7 @@
 package dev.trotrohailer.shared.result
 
+import dev.trotrohailer.shared.result.Response.Success
+
 /**
  * Wrapper for callbacks
  */
@@ -17,4 +19,12 @@ sealed class Response<out R> {
     }
 }
 
-val Response<*>.succeeded get() = this is Response.Success && data != null
+/**
+ * `true` if [Result] is of type [Success] & holds non-null [Success.data].
+ */
+val Response<*>.succeeded
+    get() = this is Success && data != null
+
+fun <T> Response<T>.successOr(fallback: T): T {
+    return (this as? Success<T>)?.data ?: fallback
+}
