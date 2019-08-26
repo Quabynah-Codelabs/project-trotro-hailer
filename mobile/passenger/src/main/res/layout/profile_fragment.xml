@@ -67,6 +67,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_normal"
                 android:hint="Username">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -113,8 +114,9 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save and exit"
-                android:onClick="@{(view) -> viewModel.saveAndExit(view)}"/>
+                android:layout_marginTop="@dimen/padding_normal"
+                android:onClick="@{(view) -> viewModel.saveAndExit(view, passenger)}"
+                android:text="Save and exit" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

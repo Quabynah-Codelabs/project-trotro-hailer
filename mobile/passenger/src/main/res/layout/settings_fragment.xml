@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
@@ -27,7 +29,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:menu="@menu/settings_menu"
                 app:navigationContentDescription="@string/default_app_name_passenger"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/title_settings" />
@@ -112,6 +113,21 @@
                         android:textColor="?colorPrimary"
                         app:goneUnless="@{viewModel.hasPaymentMethods == false}"
                         app:icon="@drawable/twotone_add_24px" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="?actionBarSize"
+                        android:layout_margin="@dimen/spacing_normal"
+                        android:alpha="?alphaMedium"
+                        android:drawableStart="@drawable/twotone_credit_card_24px"
+                        android:drawableEnd="@drawable/twotone_edit_24px"
+                        android:drawablePadding="@dimen/padding_normal"
+                        android:fontFamily="@font/google_sans_medium"
+                        android:gravity="center_vertical"
+                        android:textAppearance="?textAppearanceBody2"
+                        app:goneUnless="@{viewModel.hasPaymentMethods}"
+                        tools:text="1234-2344-2302-2322" />
 
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

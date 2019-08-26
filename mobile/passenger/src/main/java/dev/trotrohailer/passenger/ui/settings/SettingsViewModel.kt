@@ -49,4 +49,9 @@ class SettingsViewModel constructor(
     fun addPaymentMethod(view: View) {
         Navigation.findNavController(view).navigate(R.id.navigation_profile)
     }
+
+    fun saveAndExit(view: View, passenger: Passenger?) {
+        // todo: save and exit
+        debugger("Passenger to be saved: $passenger")
+    }
 }
