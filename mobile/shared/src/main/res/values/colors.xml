@@ -38,13 +38,13 @@
     <color name="black">#000</color>
     <color name="transparent">#0fff</color>
 
-    <color name="color_primary">#344955</color>
-    <color name="color_primary_dark">#232F34</color>
-    <color name="color_on_secondary">#F9AA33</color>
+<!--    <color name="color_primary">#344955</color>-->
+<!--    <color name="color_primary_dark">#232F34</color>-->
+<!--    <color name="color_on_secondary">#F9AA33</color>-->
 
-    <!--    <color name="color_primary">@color/deep_sky_blue</color>-->
-    <!--    <color name="color_primary_dark">@color/warm_blue</color>-->
-    <!--    <color name="color_on_secondary">@color/white</color>-->
+        <color name="color_primary">@color/deep_sky_blue</color>
+        <color name="color_primary_dark">@color/warm_blue</color>
+        <color name="color_on_secondary">@color/white</color>
 
     <color name="color_control_light">#39000000</color> <!-- Same as textColorPrimary disabled -->
 
