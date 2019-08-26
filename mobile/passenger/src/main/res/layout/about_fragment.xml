@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data />
+    <data>
+
+        <import type="dev.trotrohailer.shared.BuildConfig" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -27,6 +30,41 @@
                 app:title="@string/title_about" />
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_normal"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <ImageView
+                android:layout_width="@dimen/large_avatar_size"
+                android:layout_height="@dimen/large_avatar_size"
+                android:scaleType="centerCrop"
+                android:src="@drawable/group" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
+                android:padding="@dimen/padding_normal"
+                android:text="@{BuildConfig.VERSION_NAME, default=`Version 123-009`}"
+                android:textAppearance="?textAppearanceHeadline6" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="?alphaMedium"
+                android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
+                android:padding="@dimen/spacing_normal"
+                android:text="@string/developer"
+                android:textAppearance="?textAppearanceBody2" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -30,28 +30,6 @@ fun View.gone() {
 }
 
 
-@BindingAdapter("goneUnless")
-fun goneUnless(view: View, visible: Boolean) {
-    view.visibility = if (visible) View.VISIBLE else View.GONE
-}
-
-@BindingAdapter("fabVisibility")
-fun fabVisibility(fab: FloatingActionButton, visible: Boolean) {
-    if (visible) fab.show() else fab.hide()
-}
-
-@BindingAdapter("pageMargin")
-fun pageMargin(viewPager: ViewPager, pageMargin: Float) {
-    viewPager.pageMargin = pageMargin.toInt()
-}
-
-@BindingAdapter("clipToCircle")
-fun clipToCircle(view: View, clip: Boolean) {
-    view.clipToOutline = clip
-    view.outlineProvider = if (clip) CircularOutlineProvider else null
-}
-
-
 @SuppressLint("NewApi") // Lint does not understand isAtLeastQ currently
 fun DrawerLayout.shouldCloseDrawerFromBackPress(): Boolean {
     if (BuildCompat.isAtLeastQ()) {
@@ -67,35 +45,6 @@ fun DrawerLayout.shouldCloseDrawerFromBackPress(): Boolean {
     return true
 }
 
-/**
- * Sets the colors of the [CustomSwipeRefreshLayout] loading indicator.
- */
-@BindingAdapter("swipeRefreshColors")
-fun setSwipeRefreshColors(swipeRefreshLayout: CustomSwipeRefreshLayout, colorResIds: IntArray) {
-    swipeRefreshLayout.setColorSchemeColors(*colorResIds)
-}
-
-private const val CHROME_PACKAGE = "com.android.chrome"
-
-@BindingAdapter("websiteLink", "hideWhenEmpty", requireAll = false)
-fun websiteLink(
-    button: View,
-    url: String?,
-    hideWhenEmpty: Boolean = false
-) {
-    if (url.isNullOrEmpty()) {
-        if (hideWhenEmpty) {
-            button.isVisible = false
-        } else {
-            button.isClickable = false
-        }
-        return
-    }
-    button.isVisible = true
-    button.setOnClickListener {
-        openWebsiteUrl(it.context, url)
-    }
-}
 
 fun openWebsiteUrl(context: Context, url: String) {
     if (url.isBlank()) {
@@ -116,9 +65,68 @@ fun openWebsiteUri(context: Context, uri: Uri) {
     }
 }
 
+private const val CHROME_PACKAGE = "com.android.chrome"
 private fun Context.isChromeCustomTabsSupported(): Boolean {
     val serviceIntent = Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION)
     serviceIntent.setPackage(CHROME_PACKAGE)
     val resolveInfos = packageManager.queryIntentServices(serviceIntent, 0)
     return !resolveInfos.isNullOrEmpty()
+}
+
+object ViewExts {
+
+    /**
+     * Sets the colors of the [CustomSwipeRefreshLayout] loading indicator.
+     */
+    @JvmStatic
+    @BindingAdapter("swipeRefreshColors")
+    fun setSwipeRefreshColors(swipeRefreshLayout: CustomSwipeRefreshLayout, colorResIds: IntArray) {
+        swipeRefreshLayout.setColorSchemeColors(*colorResIds)
+    }
+
+    @JvmStatic
+    @BindingAdapter("websiteLink", "hideWhenEmpty", requireAll = false)
+    fun websiteLink(
+        button: View,
+        url: String?,
+        hideWhenEmpty: Boolean = false
+    ) {
+        if (url.isNullOrEmpty()) {
+            if (hideWhenEmpty) {
+                button.isVisible = false
+            } else {
+                button.isClickable = false
+            }
+            return
+        }
+        button.isVisible = true
+        button.setOnClickListener {
+            openWebsiteUrl(it.context, url)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("goneUnless")
+    fun goneUnless(view: View, visible: Boolean) {
+        view.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("fabVisibility")
+    fun fabVisibility(fab: FloatingActionButton, visible: Boolean) {
+        if (visible) fab.show() else fab.hide()
+    }
+
+    @JvmStatic
+    @BindingAdapter("pageMargin")
+    fun pageMargin(viewPager: ViewPager, pageMargin: Float) {
+        viewPager.pageMargin = pageMargin.toInt()
+    }
+
+    @JvmStatic
+    @BindingAdapter("clipToCircle")
+    fun clipToCircle(view: View, clip: Boolean) {
+        view.clipToOutline = clip
+        view.outlineProvider = if (clip) CircularOutlineProvider else null
+    }
 }

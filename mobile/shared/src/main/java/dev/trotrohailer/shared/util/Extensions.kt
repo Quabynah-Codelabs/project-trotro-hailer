@@ -1,7 +1,12 @@
 package dev.trotrohailer.shared.util
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.os.Parcel
+import androidx.annotation.DimenRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.ParcelCompat
 import androidx.core.os.bundleOf
 import androidx.core.text.trimmedLength
 import androidx.fragment.app.FragmentActivity
@@ -31,18 +36,37 @@ fun FragmentActivity.intentTo(
     if (finished) finishAffinity()
 }
 
+/**
+ * Linearly interpolate between two values.
+ */
+fun lerp(a: Float, b: Float, t: Float): Float {
+    return a + (b - a) * t
+}
+
+/**
+ * Alternative to Resources.getDimension() for values that are TYPE_FLOAT.
+ */
+fun Resources.getFloatUsingCompat(@DimenRes resId: Int): Float {
+    return ResourcesCompat.getFloat(this, resId)
+}
+
+/** Write a boolean to a Parcel. */
+fun Parcel.writeBooleanUsingCompat(value: Boolean) = ParcelCompat.writeBoolean(this, value)
+
+/** Read a boolean from a Parcel. */
+fun Parcel.readBooleanUsingCompat() = ParcelCompat.readBoolean(this)
 
 fun FirebaseUser.mapToPassenger(): Passenger = Passenger(
     uid,
     displayName ?: "No username",
-    if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl,
+    if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl.toString(),
     phoneNumber
 )
 
 fun FirebaseUser.mapToDriver(): Driver =
     Driver(
         uid, displayName ?: "No username", "", "",
-        if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl
+        if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl.toString()
     )
 
 object Constants {

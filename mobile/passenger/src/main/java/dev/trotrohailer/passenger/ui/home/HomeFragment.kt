@@ -14,10 +14,10 @@ import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 
-class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
+class HomeFragment : MainNavigationFragment()/*, OnMapReadyCallback*/ {
     private var binding: HomeFragmentBinding? = null
-    private val customMap by lazy { MyLocationGoogleMap(requireContext()) }
-    private var map: GoogleMap? = null
+   /* private val customMap by lazy { MyLocationGoogleMap(requireContext()) }
+    private var map: GoogleMap? = null*/
 
     private lateinit var viewModel: HomeViewModel
 
@@ -34,12 +34,12 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
         // Setup map
-        val mapFragment =
+       /* val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
+        mapFragment?.getMapAsync(this)*/
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+   /* override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map?.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
@@ -54,5 +54,5 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onDestroy() {
         if (map != null) this.customMap.removeFrom(map)
         super.onDestroy()
-    }
+    }*/
 }

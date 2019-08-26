@@ -3,9 +3,11 @@ package dev.trotrohailer.passenger.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,25 +17,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.ActivityMainBinding
+import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.NavigationHost
 import dev.trotrohailer.shared.base.BaseTrackingActivity
 import dev.trotrohailer.shared.databinding.HeaderViewBinding
 import dev.trotrohailer.shared.datasource.PassengerRepository
-import dev.trotrohailer.shared.result.Response
+import dev.trotrohailer.shared.glide.load
 import dev.trotrohailer.shared.util.Constants
-import dev.trotrohailer.shared.util.debugger
-import dev.trotrohailer.shared.util.mapToPassenger
 import dev.trotrohailer.shared.util.shouldCloseDrawerFromBackPress
 import dev.trotrohailer.shared.widget.HeightTopWindowInsetsListener
 import dev.trotrohailer.shared.widget.NoopWindowInsetsListener
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
 class MainActivity : BaseTrackingActivity(), NavigationHost {
     private val repo by inject<PassengerRepository>(named(Constants.PASSENGERS))
     private val auth by inject<FirebaseAuth>()
+    private val viewModel by inject<SettingsViewModel>()
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private var navHostFragment: NavHostFragment? = null
@@ -86,31 +88,14 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
     }
 
     private fun fetchAndSaveUser() {
-        try {
-            ioScope.launch {
-                when (val response =
-                    repo.getUser(auth.currentUser?.uid!!, hasNetworkConnection())) {
-                    is Response.Success -> {
-                        debugger("Current user: ${response.data}")
-                        uiScope.launch {
-                            HeaderViewBinding.inflate(layoutInflater).passenger = response.data
-                        }
-                        if (response.data == null) repo.saveUser(auth.currentUser!!.mapToPassenger())
-                    }
-
-                    is Response.Error -> {
-                        debugger("Error loading avatar: ${response.e.localizedMessage}")
-                        repo.saveUser(auth.currentUser!!.mapToPassenger())
-                    }
-
-                    is Response.Loading -> {
-                        debugger("Loading user avatar")
-                    }
+        viewModel.passenger.observe(this, Observer { passenger ->
+            HeaderViewBinding.inflate(layoutInflater, binding.navView, false)
+                .apply {
+                    lifecycleOwner = this@MainActivity
+                    userAvatar.load(passenger?.avatar?.toUri())
+                    userName.text = passenger?.name
                 }
-            }
-        } catch (e: Exception) {
-            debugger(e.localizedMessage)
-        }
+        })
     }
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {

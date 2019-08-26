@@ -19,8 +19,8 @@ fun ImageView.load(uri: Uri?, circleCrop: Boolean = true) = GlideApp.with(contex
     .apply {
         if (circleCrop) {
             circleCrop()
-                .placeholder(R.drawable.avatar_placeholder)
-                .error(R.drawable.avatar_placeholder)
+                .placeholder(R.drawable.ic_default_avatar_2)
+                .error(R.drawable.ic_default_avatar_1)
         } else {
             placeholder(R.color.avatar_content_color)
                 .error(R.color.avatar_content_color)

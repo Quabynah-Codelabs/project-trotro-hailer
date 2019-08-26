@@ -12,6 +12,7 @@ import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.datasource.UserRepository
 import dev.trotrohailer.shared.util.Constants
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 
 import dev.trotrohailer.passenger.R
+import dev.trotrohailer.passenger.util.MainNavigationFragment
 
-class AboutFragment : Fragment() {
+class AboutFragment : MainNavigationFragment() {
 
     private lateinit var viewModel: AboutViewModel
 
