@@ -47,6 +47,42 @@ class SettingsViewModel constructor(
 
     val passenger: LiveData<Passenger> = _passenger
 
+    fun saveUser(passenger: Passenger) = viewModelScope.launch {
+        repository.saveUser(passenger)
+    }
+
+    fun getUsers(refresh: Boolean = false): LiveData<MutableList<Passenger>> {
+        val users = MutableLiveData<MutableList<Passenger>>()
+        viewModelScope.launch {
+            when (val response = repository.getUsers(refresh)) {
+                is Response.Success -> {
+                    users.postValue(response.data)
+                }
+                else -> {
+                    //
+                    users.postValue(mutableListOf())
+                }
+            }
+        }
+        return users
+    }
+
+    fun getUser(id: String, refresh: Boolean = false): LiveData<Passenger> {
+        val user = MutableLiveData<Passenger>()
+        viewModelScope.launch {
+            when (val response = repository.getUser(id, refresh)) {
+                is Response.Success -> {
+                    user.postValue(response.data)
+                }
+                else -> {
+                    //
+                    user.postValue(null)
+                }
+            }
+        }
+        return user
+    }
+
     fun addPaymentMethod(view: View) =
         Navigation.findNavController(view).navigate(R.id.navigation_profile)
 

@@ -13,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.auth.FirebaseAuth
 import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.ActivityMainBinding
@@ -22,18 +21,13 @@ import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.NavigationHost
 import dev.trotrohailer.shared.base.BaseTrackingActivity
 import dev.trotrohailer.shared.databinding.HeaderViewBinding
-import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.glide.load
-import dev.trotrohailer.shared.util.Constants
 import dev.trotrohailer.shared.util.shouldCloseDrawerFromBackPress
 import dev.trotrohailer.shared.widget.HeightTopWindowInsetsListener
 import dev.trotrohailer.shared.widget.NoopWindowInsetsListener
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
 
 class MainActivity : BaseTrackingActivity(), NavigationHost {
-    private val repo by inject<PassengerRepository>(named(Constants.PASSENGERS))
-    private val auth by inject<FirebaseAuth>()
     private val viewModel by inject<SettingsViewModel>()
 
     private lateinit var binding: ActivityMainBinding
@@ -45,14 +39,16 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        HyperTrack.addNotificationIconsAndTitle(
-            dev.trotrohailer.shared.R.drawable.group,
-            dev.trotrohailer.shared.R.drawable.group,
-            getString(
-                dev.trotrohailer.shared.R.string.default_app_name_passenger
-            ),
-            "You are currently visible to all drivers in your vicinity"
-        )
+        if (HyperTrack.isTracking()){
+            HyperTrack.addNotificationIconsAndTitle(
+                dev.trotrohailer.shared.R.drawable.group,
+                dev.trotrohailer.shared.R.drawable.group,
+                getString(
+                    dev.trotrohailer.shared.R.string.default_app_name_passenger
+                ),
+                "You are currently visible to all drivers in your vicinity"
+            )
+        }
         fetchAndSaveUser()
         setupNavHost(savedInstanceState)
     }

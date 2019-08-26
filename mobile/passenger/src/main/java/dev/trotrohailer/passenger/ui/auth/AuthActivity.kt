@@ -13,23 +13,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import dev.trotrohailer.passenger.ui.home.MainActivity
+import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.databinding.ActivityAuthBinding
-import dev.trotrohailer.shared.datasource.PassengerRepository
-import dev.trotrohailer.shared.util.Constants
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.intentTo
 import dev.trotrohailer.shared.util.mapToPassenger
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
 import dev.trotrohailer.passenger.R as appR
 import dev.trotrohailer.shared.R as sharedR
 
 class AuthActivity : BaseActivity() {
-    private val repo by inject<PassengerRepository>(named(Constants.PASSENGERS))
+    private val viewModel by inject<SettingsViewModel>()
     private lateinit var binding: ActivityAuthBinding
+
     private val snackbar by lazy {
         Snackbar.make(
             binding.coordinatorLayout,
@@ -119,12 +117,8 @@ class AuthActivity : BaseActivity() {
             debugger("Firebase user could not be created")
         } else {
             snackbar.setText("Saving user information").show()
-            ioScope.launch {
-                repo.saveUser(firebaseUser.mapToPassenger())
-                uiScope.launch {
-                    intentTo(MainActivity::class.java, true)
-                }
-            }
+            viewModel.saveUser(firebaseUser.mapToPassenger())
+            intentTo(MainActivity::class.java, true)
         }
     }
 
