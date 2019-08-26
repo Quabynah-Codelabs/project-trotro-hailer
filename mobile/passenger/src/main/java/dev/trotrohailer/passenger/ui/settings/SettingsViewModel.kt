@@ -10,6 +10,7 @@ import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.result.Response
 import dev.trotrohailer.shared.result.succeeded
 import dev.trotrohailer.shared.util.debugger
+import dev.trotrohailer.shared.util.toast
 import kotlinx.coroutines.launch
 
 class SettingsViewModelFactory(
@@ -33,7 +34,7 @@ class SettingsViewModel constructor(
     init {
         viewModelScope.launch {
             try {
-                val response = repository.getUser(auth.uid!!, true)
+                val response = repository.getUser(auth.uid!!, false)
                 if (response.succeeded) {
                     _passenger.postValue((response as Response.Success).data)
                     debugger("From view model: ${response.data}")
@@ -46,12 +47,15 @@ class SettingsViewModel constructor(
 
     val passenger: LiveData<Passenger> = _passenger
 
-    fun addPaymentMethod(view: View) {
+    fun addPaymentMethod(view: View) =
         Navigation.findNavController(view).navigate(R.id.navigation_profile)
-    }
 
     fun saveAndExit(view: View, passenger: Passenger?) {
-        // todo: save and exit
         debugger("Passenger to be saved: $passenger")
+        viewModelScope.launch {
+            if (passenger != null) repository.saveUser(passenger)
+        }
+        view.toast("Profile information updated successfully")
+        Navigation.findNavController(view).popBackStack()
     }
 }

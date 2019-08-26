@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="passenger"
+            name="user"
             type="dev.trotrohailer.shared.data.Passenger" />
 
         <variable
@@ -83,7 +83,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
+                android:layout_marginTop="@dimen/padding_large"
                 android:hint="Phone Number">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -96,26 +96,27 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:layout_marginTop="@dimen/padding_large"
+                android:fontFamily="@font/google_sans_medium"
+                android:text="Payment Methods"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/edit_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:hint="Payment Method">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_payment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/google_sans"
-                    android:inputType="textCapWords|textPersonName|textAutoComplete|textAutoCorrect" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/spacing_normal" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_normal"
-                android:onClick="@{(view) -> viewModel.saveAndExit(view, passenger)}"
+                android:layout_marginTop="@dimen/padding_xlarge"
+                android:onClick="@{(view) -> viewModel.saveAndExit(view, user)}"
                 android:text="Save and exit" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

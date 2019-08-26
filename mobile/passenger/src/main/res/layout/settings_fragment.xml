@@ -105,23 +105,22 @@
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/spacing_micro"
-                        android:onClick="@{(view) -> viewModel.addPaymentMethod(view)}"
-                        android:text="Add Payment Method"
+                        android:alpha="?alphaMedium"
+                        android:clickable="false"
+                        android:gravity="center"
+                        android:text="No payment methods available"
                         android:textColor="?colorPrimary"
-                        app:goneUnless="@{viewModel.hasPaymentMethods == false}"
-                        app:icon="@drawable/twotone_add_24px" />
-
+                        app:goneUnless="@{viewModel.hasPaymentMethods == false}" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="?actionBarSize"
                         android:layout_margin="@dimen/spacing_normal"
-                        android:alpha="?alphaMedium"
                         android:drawableStart="@drawable/twotone_credit_card_24px"
-                        android:drawableEnd="@drawable/twotone_edit_24px"
+                        android:drawableEnd="@drawable/twotone_delete_24px"
                         android:drawablePadding="@dimen/padding_normal"
                         android:fontFamily="@font/google_sans_medium"
                         android:gravity="center_vertical"
@@ -135,6 +134,14 @@
             </androidx.core.widget.NestedScrollView>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:onClick="@{(view) -> viewModel.addPaymentMethod(view)}"
+            android:src="@drawable/twotone_edit_24px" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

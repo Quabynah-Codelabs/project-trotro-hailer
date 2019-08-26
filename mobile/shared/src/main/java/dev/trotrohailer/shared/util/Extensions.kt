@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Parcel
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.DimenRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.ParcelCompat
@@ -16,7 +18,6 @@ import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.data.Passenger
 import dev.trotrohailer.shared.util.Constants.DRIVERS
 import dev.trotrohailer.shared.util.Constants.PASSENGERS
-import java.util.*
 
 fun debugger(msg: Any?) = println("TroTro ==> ${msg.toString()}")
 
@@ -68,6 +69,8 @@ fun FirebaseUser.mapToDriver(): Driver =
         uid, displayName ?: "No username", "", "",
         if (photoUrl == null) null else if (photoUrl.toString().trimmedLength() > 80) null else photoUrl.toString()
     )
+
+fun View.toast(msg: Any?) = Toast.makeText(context, msg.toString(), Toast.LENGTH_SHORT).show()
 
 object Constants {
     const val PASSENGERS = "passengers"
