@@ -22,6 +22,7 @@
             app:avatar="@{passenger.avatar}"
             android:layout_width="@dimen/avatar_size"
             android:layout_height="@dimen/avatar_size"
+            app:clipToCircle="true"
             android:src="@drawable/ic_default_avatar_2" />
 
         <LinearLayout

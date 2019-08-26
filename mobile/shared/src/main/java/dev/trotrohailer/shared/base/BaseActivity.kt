@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
     private val job = Job()
     val ioScope = CoroutineScope(Dispatchers.IO)
     val uiScope = CoroutineScope(Dispatchers.Main + job)

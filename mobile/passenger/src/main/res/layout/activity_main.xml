@@ -6,9 +6,10 @@
     <data />
 
     <dev.trotrohailer.shared.widget.NavigationBarContentFrameLayout
+        android:id="@+id/drawer_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.MainActivity">
+        tools:context="dev.trotrohailer.passenger.ui.home.MainActivity">
 
         <androidx.drawerlayout.widget.DrawerLayout
             android:id="@+id/drawer"
@@ -16,57 +17,35 @@
             android:layout_height="match_parent"
             tools:openDrawer="start">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/container"
+            <FrameLayout
+                android:id="@+id/content_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-                <com.google.android.material.appbar.AppBarLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:liftOnScroll="true">
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        style="@style/Widget.IOSched.Toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:title="@string/default_app_name_passenger" />
-
-                </com.google.android.material.appbar.AppBarLayout>
-
-                <FrameLayout
-                    android:id="@+id/content_container"
+                <fragment
+                    android:id="@+id/nav_host_fragment"
+                    android:name="dev.trotrohailer.passenger.util.DispatchInsetsNavHostFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/nav_graph" />
 
-                    <fragment
-                        android:id="@+id/nav_host_fragment"
-                        android:name="dev.trotrohailer.passenger.util.DispatchInsetsNavHostFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:defaultNavHost="true"
-                        app:navGraph="@navigation/nav_graph" />
+                <View
+                    android:id="@+id/status_bar_scrim"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/status_bar_scrim" />
 
-                    <View
-                        android:id="@+id/status_bar_scrim"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:background="@color/status_bar_scrim" />
-
-                </FrameLayout>
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </FrameLayout>
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_view"
                 style="@style/Widget.IOSched.NavigationView"
-                android:layout_width="280dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:fitsSystemWindows="true"
                 app:headerLayout="@layout/header_view"
                 app:menu="@menu/main_nav_menu" />
 
