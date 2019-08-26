@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="dev.trotrohailer.shared.BuildConfig" />
+        <import type="dev.trotrohailer.passenger.BuildConfig" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,6 +39,16 @@
             android:padding="@dimen/padding_normal"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_normal"
+                android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
+                android:padding="@dimen/padding_normal"
+                android:text="@string/default_app_name_passenger"
+                android:textAppearance="?textAppearanceHeadline5" />
+
             <ImageView
                 android:layout_width="@dimen/large_avatar_size"
                 android:layout_height="@dimen/large_avatar_size"
@@ -50,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/google_sans_medium"
                 android:gravity="center"
-                android:padding="@dimen/padding_normal"
+                android:padding="@dimen/spacing_normal"
                 android:text="@{BuildConfig.VERSION_NAME, default=`Version 123-009`}"
                 android:textAppearance="?textAppearanceHeadline6" />
 
@@ -58,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="?alphaMedium"
-                android:fontFamily="@font/google_sans_medium"
+                android:fontFamily="@font/google_sans"
                 android:gravity="center"
                 android:padding="@dimen/spacing_normal"
                 android:text="@string/developer"

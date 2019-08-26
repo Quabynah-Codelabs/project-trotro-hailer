@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
@@ -27,16 +27,19 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
+                app:menu="@menu/settings_menu"
                 app:navigationContentDescription="@string/default_app_name_passenger"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/title_settings" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:padding="@dimen/padding_normal"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -46,23 +49,76 @@
                 android:layout_height="@dimen/large_avatar_size"
                 android:src="@drawable/ic_default_avatar_2"
                 app:avatar="@{viewModel.passenger.avatar}"
-                app:clipToCircle="@{true}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:clipToCircle="@{true}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_normal"
+                android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
+                android:padding="@dimen/spacing_micro"
+                android:text="@{viewModel.passenger.name}"
+                android:textAppearance="?textAppearanceHeadline6"
+                tools:text="@tools:sample/lorem" />
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_normal"
+                android:alpha="?alphaMedium"
+                android:fontFamily="@font/google_sans"
                 android:gravity="center"
-                android:padding="@dimen/spacing_normal"
-                android:text="@{viewModel.passenger.name}"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintTop_toBottomOf="@id/user_avatar"
+                android:text="@{viewModel.passenger.phone == `` ? `No phone number` : viewModel.passenger.phone, default=`No phone number`}"
+                android:textAppearance="?textAppearanceSubtitle2"
                 tools:text="@tools:sample/lorem" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="@dimen/nav_drawer_width"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/large_avatar_size"
+                android:layout_marginTop="@dimen/padding_normal"
+                android:layout_marginEnd="@dimen/large_avatar_size"
+                android:layout_marginBottom="@dimen/padding_normal"
+                android:background="@color/grey_divider" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="@dimen/padding_normal"
+                        android:layout_marginTop="@dimen/padding_normal"
+                        android:fontFamily="@font/google_sans_medium"
+                        android:text="Payment Methods"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/spacing_micro"
+                        android:onClick="@{(view) -> viewModel.addPaymentMethod(view)}"
+                        android:text="Add Payment Method"
+                        android:textColor="?colorPrimary"
+                        app:goneUnless="@{viewModel.hasPaymentMethods == false}"
+                        app:icon="@drawable/twotone_add_24px" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

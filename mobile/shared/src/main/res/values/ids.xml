@@ -4,4 +4,5 @@
     <item name="navigation_trips" type="id" />
     <item name="navigation_settings" type="id" />
     <item name="navigation_about" type="id" />
+    <item name="navigation_profile" type="id" />
 </resources>

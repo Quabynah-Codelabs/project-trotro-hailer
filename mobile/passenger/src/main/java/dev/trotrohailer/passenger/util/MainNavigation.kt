@@ -19,6 +19,7 @@ package dev.trotrohailer.passenger.util
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import dev.trotrohailer.passenger.R
@@ -72,3 +73,6 @@ open class MainNavigationFragment : Fragment(),
         }
     }
 }
+
+fun MainNavigationFragment.toast(msg: Any?) =
+    Toast.makeText(requireContext(), msg.toString(), Toast.LENGTH_SHORT).show()
