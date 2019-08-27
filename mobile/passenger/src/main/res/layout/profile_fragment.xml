@@ -6,9 +6,16 @@
     <data>
 
         <variable
+            name="hasFieldsNonEmpty"
+            type="Boolean" />
+
+        <variable
             name="user"
             type="dev.trotrohailer.shared.data.Passenger" />
 
+        <!--<variable
+            name="viewModel"
+            type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />-->
         <variable
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
@@ -116,6 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_xlarge"
+                android:enabled="@{hasFieldsNonEmpty, default=`false`}"
                 android:onClick="@{(view) -> viewModel.saveAndExit(view, user)}"
                 android:text="Save and exit" />
 

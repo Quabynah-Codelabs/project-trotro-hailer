@@ -17,8 +17,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     private val customMap by lazy { MyLocationGoogleMap(requireContext()) }
     private var map: GoogleMap? = null
 
-    //private lateinit var viewModel: HomeViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,7 +27,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         binding.map.onCreate(savedInstanceState)
         binding.map.getMapAsync(this)
     }

@@ -12,7 +12,7 @@ data class Address(val displayAddress: String, val coordinate: Coordinate) : Par
 
 @Parcelize
 data class Coordinate(val latitude: Double, val longitude: Double) : Parcelable {
-    constructor() : this(5.22, -0.124)
+    constructor() : this(5.5502, -0.2174)
 
     companion object {
         val EMPTY = Coordinate()

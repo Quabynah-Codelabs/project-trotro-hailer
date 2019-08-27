@@ -29,7 +29,6 @@ class SettingsViewModel constructor(
     private val auth: FirebaseAuth
 ) : ViewModel() {
     private val _passenger = MutableLiveData<Passenger>()
-    val hasPaymentMethods = MutableLiveData<Boolean>()
 
     init {
         viewModelScope.launch {
@@ -37,7 +36,6 @@ class SettingsViewModel constructor(
                 val response = repository.getUser(auth.uid!!, false)
                 if (response.succeeded) {
                     _passenger.postValue((response as Response.Success).data)
-                    debugger("From view model: ${response.data}")
                 }
             } catch (e: Exception) {
                 debugger(e.localizedMessage)

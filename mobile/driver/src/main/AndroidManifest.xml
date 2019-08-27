@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup"
+        android:fullBackupContent="@xml/backup_descriptor"
         tools:replace="android:allowBackup,android:fullBackupContent">
 
         <meta-data

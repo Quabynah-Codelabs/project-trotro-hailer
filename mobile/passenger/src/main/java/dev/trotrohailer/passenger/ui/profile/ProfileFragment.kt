@@ -12,11 +12,13 @@ import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.ProfileFragmentBinding
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
+import dev.trotrohailer.passenger.util.prefs.PaymentPrefs
 import org.koin.android.ext.android.inject
 
 class ProfileFragment : MainNavigationFragment() {
     private lateinit var binding: ProfileFragmentBinding
     private val viewModel by inject<SettingsViewModel>()
+    private val prefs by inject<PaymentPrefs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,8 +30,8 @@ class ProfileFragment : MainNavigationFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.viewModel = viewModel
         viewModel.passenger.observe(viewLifecycleOwner, Observer { passenger ->
+            binding.viewModel = viewModel
             binding.user = passenger
         })
         addTextWatchers()
@@ -38,11 +40,15 @@ class ProfileFragment : MainNavigationFragment() {
     private fun addTextWatchers() {
         binding.editUsername.addTextChangedListener { text ->
             if (text.isNullOrEmpty()) return@addTextChangedListener
+            binding.hasFieldsNonEmpty =
+                !text.isNullOrEmpty() && !binding.editPhone.text.isNullOrEmpty()
             binding.user?.name = text.toString().trim()
         }
 
         binding.editPhone.addTextChangedListener { text ->
             if (text.isNullOrEmpty()) return@addTextChangedListener
+            binding.hasFieldsNonEmpty =
+                !text.isNullOrEmpty() && !binding.editUsername.text.isNullOrEmpty()
             binding.user?.phone = text.toString().trim()
         }
 
@@ -57,7 +63,7 @@ class ProfileFragment : MainNavigationFragment() {
         }
         binding.editPayment.onItemSelectedListener = object : DropDownItemSelectedListener {
             override fun onItemSelected(item: String) {
-                // todo: Save this settings somewhere
+                prefs.updatePayment(item)
             }
         }
     }

@@ -10,6 +10,11 @@
         <variable
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
+
+      <variable
+          name="prefs"
+          type="dev.trotrohailer.passenger.util.prefs.PaymentPrefs" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -113,20 +118,19 @@
                         android:gravity="center"
                         android:text="No payment methods available"
                         android:textColor="?colorPrimary"
-                        app:goneUnless="@{viewModel.hasPaymentMethods == false}" />
+                        app:goneUnless="@{prefs.paymentMethod != null}" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="?actionBarSize"
                         android:layout_margin="@dimen/spacing_normal"
-                        android:drawableStart="@drawable/twotone_credit_card_24px"
-                        android:drawableEnd="@drawable/twotone_delete_24px"
                         android:drawablePadding="@dimen/padding_normal"
                         android:fontFamily="@font/google_sans_medium"
                         android:gravity="center_vertical"
+                        android:text="@{prefs.paymentMethod}"
                         android:textAppearance="?textAppearanceBody2"
-                        app:goneUnless="@{viewModel.hasPaymentMethods}"
-                        tools:text="1234-2344-2302-2322" />
+                        app:goneUnless="@{prefs.paymentMethod == null}"
+                        tools:text="@tools:sample/lorem" />
 
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

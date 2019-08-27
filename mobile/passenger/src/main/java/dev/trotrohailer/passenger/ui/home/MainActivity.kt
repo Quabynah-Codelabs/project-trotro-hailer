@@ -3,11 +3,9 @@ package dev.trotrohailer.passenger.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,12 +14,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.ActivityMainBinding
+import dev.trotrohailer.passenger.databinding.HeaderViewBinding
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.NavigationHost
 import dev.trotrohailer.shared.base.BaseTrackingActivity
-import dev.trotrohailer.shared.databinding.HeaderViewBinding
-import dev.trotrohailer.shared.glide.load
 import dev.trotrohailer.shared.util.shouldCloseDrawerFromBackPress
 import dev.trotrohailer.shared.widget.HeightTopWindowInsetsListener
 import dev.trotrohailer.shared.widget.NoopWindowInsetsListener
@@ -31,6 +28,7 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
     private val viewModel by inject<SettingsViewModel>()
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var headerBinding: HeaderViewBinding
     private lateinit var navController: NavController
     private var navHostFragment: NavHostFragment? = null
     private var currentNavId = NAV_ID_NONE
@@ -38,8 +36,14 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        headerBinding = HeaderViewBinding.inflate(layoutInflater, binding.navView, false)
+        fetchAndSaveUser()
+        setupNavHost(savedInstanceState)
+    }
 
-        if (HyperTrack.isTracking()){
+    override fun locationServicesEnabled() {
+        // Start mocking location
+        if (HyperTrack.isTracking()) {
             HyperTrack.addNotificationIconsAndTitle(
                 dev.trotrohailer.shared.R.drawable.group,
                 dev.trotrohailer.shared.R.drawable.group,
@@ -49,8 +53,6 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
                 "You are currently visible to all drivers in your vicinity"
             )
         }
-        fetchAndSaveUser()
-        setupNavHost(savedInstanceState)
     }
 
     private fun setupNavHost(savedInstanceState: Bundle?) {
@@ -84,14 +86,10 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
     }
 
     private fun fetchAndSaveUser() {
-        viewModel.passenger.observe(this, Observer { passenger ->
-            HeaderViewBinding.inflate(layoutInflater, binding.navView, false)
-                .apply {
-                    lifecycleOwner = this@MainActivity
-                    userAvatar.load(passenger?.avatar?.toUri())
-                    userName.text = passenger?.name
-                }
-        })
+        headerBinding.apply {
+            lifecycleOwner = this@MainActivity
+            viewModel = this@MainActivity.viewModel
+        }
     }
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {

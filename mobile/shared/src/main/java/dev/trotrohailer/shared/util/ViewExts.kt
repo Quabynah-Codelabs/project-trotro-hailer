@@ -106,25 +106,25 @@ object ViewExts {
     }
 
     @JvmStatic
-    @BindingAdapter("goneUnless")
+    @BindingAdapter("app:goneUnless")
     fun goneUnless(view: View, visible: Boolean) {
         view.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     @JvmStatic
-    @BindingAdapter("fabVisibility")
+    @BindingAdapter("app:fabVisibility")
     fun fabVisibility(fab: FloatingActionButton, visible: Boolean) {
         if (visible) fab.show() else fab.hide()
     }
 
     @JvmStatic
-    @BindingAdapter("pageMargin")
+    @BindingAdapter("app:pageMargin")
     fun pageMargin(viewPager: ViewPager, pageMargin: Float) {
         viewPager.pageMargin = pageMargin.toInt()
     }
 
     @JvmStatic
-    @BindingAdapter("clipToCircle")
+    @BindingAdapter("app:clipToCircle")
     fun clipToCircle(view: View, clip: Boolean) {
         view.clipToOutline = clip
         view.outlineProvider = if (clip) CircularOutlineProvider else null

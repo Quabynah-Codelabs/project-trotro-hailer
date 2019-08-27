@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data />
+    <data>
+
+        <variable
+            name="viewModel"
+            type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +22,7 @@
             android:layout_width="@dimen/avatar_size"
             android:layout_height="@dimen/avatar_size"
             android:src="@drawable/ic_default_avatar_2"
+            app:avatar="@{viewModel.passenger.avatar}"
             app:clipToCircle="@{true}" />
 
         <LinearLayout
@@ -32,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="?alphaHigh"
                 android:fontFamily="@font/google_sans_medium"
+                android:text="@{viewModel.passenger.name}"
                 android:textAppearance="?textAppearanceHeadline6"
                 tools:text="@tools:sample/lorem" />
 
