@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
@@ -27,11 +28,15 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.map.onCreate(savedInstanceState)
-        binding.map.getMapAsync(this)
+//        binding.map.onCreate(savedInstanceState)
+//        binding.map.getMapAsync(this)
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
+
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    /*override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.map.onSaveInstanceState(outState)
     }
@@ -64,7 +69,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onStop() {
         super.onStop()
         binding.map.onStop()
-    }
+    }*/
 
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap

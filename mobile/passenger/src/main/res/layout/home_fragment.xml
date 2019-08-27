@@ -38,7 +38,17 @@
             android:elevation="@dimen/zero_spacing"
             tools:navigationIcon="@drawable/ic_menu" />
 
-        <com.google.android.gms.maps.MapView
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+        <!--<com.google.android.gms.maps.MapView
             android:id="@+id/map"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -54,14 +64,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:uiCompass="false"
-            app:uiZoomControls="false" />
-
-        <!--            app:mapCenter="@{viewModel.mapCenterEvent}"
-            app:mapMaxZoom="@{R.dimen.map_viewport_max_zoom}"
-            app:mapMinZoom="@{R.dimen.map_viewport_min_zoom}"
-            app:mapStyle="@{viewModel.mapVariant.styleResId}"
-            app:mapTileProvider="@{viewModel.mapVariant}"
-            app:mapViewport="@{viewModel.conferenceLocationBounds}"-->
+            app:uiZoomControls="false" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
