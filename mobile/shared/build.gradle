@@ -66,7 +66,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // HyperTrack
-    api 'com.hypertrack:hypertrack:3.3.1'
+    /*api 'com.hypertrack:hypertrack:3.3.1'*/
+    api("com.hypertrack:hypertrack:3.4.3@aar") {transitive = true}
+    api 'com.hypertrack:hypertrack-views:0.2.0'
 }
 
 kapt {

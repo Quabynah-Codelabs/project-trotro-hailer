@@ -19,6 +19,7 @@
             style="@style/Widget.IOSched.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:liftOnScroll="true"
             android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar

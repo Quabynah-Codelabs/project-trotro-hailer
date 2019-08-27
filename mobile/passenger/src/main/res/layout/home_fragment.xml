@@ -35,6 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/status_bar"
             app:title="@string/title_home"
+            android:elevation="@dimen/zero_spacing"
             tools:navigationIcon="@drawable/ic_menu" />
 
         <com.google.android.gms.maps.MapView

@@ -122,6 +122,7 @@
     <dimen name="large_avatar_size">120dp</dimen>
     <dimen name="padding_large">24dp</dimen>
     <dimen name="padding_xlarge">36dp</dimen>
+    <dimen name="zero_spacing">0dp</dimen>
 
     <!-- per android.view.ViewGroup.LayoutParams -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
