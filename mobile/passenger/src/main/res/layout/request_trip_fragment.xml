@@ -3,10 +3,14 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="dev.trotrohailer.passenger.ui.trip.TripViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent">
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
