@@ -16,6 +16,7 @@
         android:background="@color/white"
         android:fitsSystemWindows="true"
         android:focusableInTouchMode="true"
+        android:id="@+id/container"
         tools:context=".ui.trip.RequestTripFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -56,6 +57,7 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@color/white"
                 android:elevation="6dp"
+                android:visibility="gone"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent">
 

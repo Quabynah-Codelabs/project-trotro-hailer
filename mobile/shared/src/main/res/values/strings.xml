@@ -10,8 +10,8 @@
     <string name="enable_location_settings">Please provide location permission </string>
     <string name="location_permission_denied_error">Please provide Location Permission for functioning of ConsumerApp</string>
 
-    <string name="book_ride">BOOK RIDE</string>
-    <string name="book_another_ride">BOOK ANOTHER RIDE</string>
+    <string name="book_ride">Join TroTro</string>
+    <string name="book_another_ride">Join another TroTro</string>
     <string name="find_driver">Connecting you to nearest driver</string>
     <string name="amount">$%1$s</string>
     <string name="estimated_fare">Estimated Fare</string>

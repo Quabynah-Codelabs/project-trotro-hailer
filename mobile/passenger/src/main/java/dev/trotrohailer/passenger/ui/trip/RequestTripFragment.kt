@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.transition.TransitionManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -17,7 +18,7 @@ import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.location.metrics.MapApi
-import dev.trotrohailer.shared.util.location.metrics.MapService
+import dev.trotrohailer.shared.util.visible
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import java.util.*
@@ -42,6 +43,9 @@ class RequestTripFragment : MainNavigationFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TripViewModel::class.java)
 
+        // Init map
+        binding.map.onCreate(savedInstanceState)
+
         // Get arguments from previous fragment
         val dropoff = arguments?.get("extra_dropoff") as? LatLng
         val pickup = arguments?.get("extra_pickup") as? LatLng
@@ -50,8 +54,16 @@ class RequestTripFragment : MainNavigationFragment() {
         debugger("Pickup: $pickup")
         debugger("DropOff: $dropoff")
 
+        val snackbar =
+            Snackbar.make(
+                binding.container,
+                "Calculating distance and duration. Please wait...",
+                Snackbar.LENGTH_INDEFINITE
+            )
+
         // Setup UI
         if (pickup != null && dropoff != null) {
+            snackbar.show()
             ioScope.launch {
                 // Get pickup address
                 val pickupAddress: String = geocoder.getFromLocation(
@@ -67,13 +79,18 @@ class RequestTripFragment : MainNavigationFragment() {
                     2
                 )[0].getAddressLine(0)
 
+                // todo: debugging
                 debugger("Pickup address: $pickupAddress")
                 debugger("DropOff address: $dropOffAddress")
 
                 // Get metrics for distance and duration
                 val mapApi: MapApi = get()
-                val mapService: MapService = get()
                 try {
+                    TransitionManager.beginDelayedTransition(binding.container)
+                    binding.bottomLayout.visible()
+                    snackbar.dismiss()
+
+                    // Get distance and duration metrics
                     val mapResult = mapApi.getDistanceForDrivingAsync(
                         origin = "${pickup.latitude},${pickup.longitude}",
                         destination = "${dropoff.latitude}, ${dropoff.longitude}"
@@ -82,8 +99,65 @@ class RequestTripFragment : MainNavigationFragment() {
                         val distance = mapResult.routes[0].legs[0].distance
                         val duration = mapResult.routes[0].legs[0].duration
 
+                        // todo: debugging
                         debugger("Distance: ${distance.text}")
                         debugger("Duration: ${duration.text}")
+
+                        uiScope.launch {
+                            binding.map.getMapAsync { map ->
+                                with(map) {
+                                    setMapStyle(
+                                        MapStyleOptions.loadRawResourceStyle(
+                                            requireContext(),
+                                            R.raw.mapstyle_uberx
+                                        )
+                                    )
+
+                                    // Add pickup location
+                                    addMarker(
+                                        MarkerOptions()
+                                            .title(getString(R.string.pickup))
+                                            .position(pickup)
+                                            .snippet(pickupAddress)
+                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
+                                    ).showInfoWindow()
+
+                                    // Add dropoff location
+                                    addMarker(
+                                        MarkerOptions()
+                                            .title(getString(R.string.dropoff))
+                                            .position(dropoff)
+                                            .snippet(dropOffAddress)
+                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
+                                    ).showInfoWindow()
+
+                                    // Move camera to drop off location
+                                    animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 19.0f))
+
+                                    addPolyline(
+                                        PolylineOptions()
+                                            .addAll(mutableListOf(pickup, dropoff))
+                                            .color(R.color.warm_blue).startCap(ButtCap())
+                                            .endCap(SquareCap())
+                                    )
+                                }
+                            }
+
+                            // Get bottom sheet
+                            with(binding) {
+                                tvDistance.text = distance.text
+                                tvTime.text = duration.text
+                                tvPrice.text = getPriceForTrip(distance.value, duration.value)
+
+                                tvPickupLocationText.text = pickupAddress
+                                tvDropoffLocationText.text = dropOffAddress
+                                btBookRide.setOnClickListener {
+                                    // todo: book ride
+                                    toast("Hello book ride")
+                                }
+                            }
+                        }
+
                     } else {
                         //
                         Snackbar.make(
@@ -91,13 +165,14 @@ class RequestTripFragment : MainNavigationFragment() {
                             "Cannot get distance and duration.",
                             Snackbar.LENGTH_LONG
                         ).addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
-                                override fun onDismissed(
-                                    transientBottomBar: Snackbar?,
-                                    event: Int
-                                ) {
-                                    findNavController().popBackStack()
-                                }
-                            })
+                            override fun onDismissed(
+                                transientBottomBar: Snackbar?,
+                                event: Int
+                            ) {
+                                //
+                                findNavController().popBackStack()
+                            }
+                        })
                             .show()
 
                     }
@@ -115,61 +190,6 @@ class RequestTripFragment : MainNavigationFragment() {
                         })
                         .show()
                 }
-
-                uiScope.launch {
-                    binding.map.onCreate(savedInstanceState)
-                    binding.map.getMapAsync { map ->
-                        with(map) {
-                            setMapStyle(
-                                MapStyleOptions.loadRawResourceStyle(
-                                    requireContext(),
-                                    R.raw.mapstyle_uberx
-                                )
-                            )
-
-                            // Add pickup location
-                            addMarker(
-                                MarkerOptions()
-                                    .title(getString(R.string.pickup))
-                                    .position(pickup)
-                                    .snippet(pickupAddress)
-                                    .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
-                            ).showInfoWindow()
-
-                            // Add dropoff location
-                            addMarker(
-                                MarkerOptions()
-                                    .title(getString(R.string.dropoff))
-                                    .position(dropoff)
-                                    .snippet(dropOffAddress)
-                                    .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
-                            ).showInfoWindow()
-
-                            // Move camera to drop off location
-                            animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 19.0f))
-
-                            addPolyline(
-                                PolylineOptions()
-                                    .addAll(mutableListOf(pickup, dropoff))
-                                    .color(R.color.warm_blue).startCap(ButtCap())
-                                    .endCap(SquareCap())
-                            )
-                        }
-                    }
-
-                    // Get bottom sheet
-                    with(binding) {
-                        tvDistance.text = "12km"
-                        tvTime.text = "25 mins"
-                        tvPrice.text = "GHS 18.50"
-                        tvPickupLocationText.text =
-                            pickupAddress
-                        tvDropoffLocationText.text = dropOffAddress
-                        btBookRide.setOnClickListener {
-                            toast("Hello book ride")
-                        }
-                    }
-                }
             }
         } else {
             toast("Unable to setup your routes")
@@ -177,10 +197,8 @@ class RequestTripFragment : MainNavigationFragment() {
         }
     }
 
-    /*override fun onResume() {
-        super.onResume()
-        binding.map.onResume()
-    }*/
+    private fun getPriceForTrip(distance: Int, duration: Int): CharSequence? =
+        "GHS ${distance.div(duration)}"
 
     override fun onPause() {
         super.onPause()
