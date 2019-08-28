@@ -9,12 +9,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.RequestTripFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.util.debugger
+import dev.trotrohailer.shared.util.location.metrics.MapApi
+import dev.trotrohailer.shared.util.location.metrics.MapService
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import java.util.*
 import dev.trotrohailer.shared.R as sharedR
 
@@ -66,22 +71,40 @@ class RequestTripFragment : MainNavigationFragment() {
                 debugger("DropOff address: $dropOffAddress")
 
                 // Get metrics for distance and duration
-//                val mapApi: MapApi = get()
-//                val mapService: MapService = get()
-                /*try {
+                val mapApi: MapApi = get()
+                val mapService: MapService = get()
+                try {
                     val mapResult = mapApi.getDistanceForDrivingAsync(
                         origin = "${pickup.latitude},${pickup.longitude}",
                         destination = "${dropoff.latitude}, ${dropoff.longitude}"
                     ).await()
-                    val distance = mapResult.routes[0].legs[0].distance
-                    val duration = mapResult.routes[0].legs[0].duration
+                    if (mapResult.routes.isNotEmpty()) {
+                        val distance = mapResult.routes[0].legs[0].distance
+                        val duration = mapResult.routes[0].legs[0].duration
 
-                    debugger("Distance: $distance")
-                    debugger("Duration: $duration")
+                        debugger("Distance: ${distance.text}")
+                        debugger("Duration: ${duration.text}")
+                    } else {
+                        //
+                        Snackbar.make(
+                            binding.bottomLayout,
+                            "Cannot get distance and duration.",
+                            Snackbar.LENGTH_LONG
+                        ).addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
+                                override fun onDismissed(
+                                    transientBottomBar: Snackbar?,
+                                    event: Int
+                                ) {
+                                    findNavController().popBackStack()
+                                }
+                            })
+                            .show()
+
+                    }
                 } catch (e: Exception) {
                     debugger(e.localizedMessage)
                     Snackbar.make(
-                        binding.container,
+                        binding.bottomLayout,
                         "Cannot get distance and duration.",
                         Snackbar.LENGTH_LONG
                     )
@@ -91,7 +114,7 @@ class RequestTripFragment : MainNavigationFragment() {
                             }
                         })
                         .show()
-                }*/
+                }
 
                 uiScope.launch {
                     binding.map.onCreate(savedInstanceState)

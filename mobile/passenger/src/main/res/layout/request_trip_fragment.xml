@@ -211,6 +211,8 @@
                     android:paddingRight="24dp"
                     android:text="@string/book_ride"
                     android:textAllCaps="true"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/normalText_sp_14"
                     android:textStyle="bold" />

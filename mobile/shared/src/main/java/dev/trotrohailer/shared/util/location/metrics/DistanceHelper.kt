@@ -73,7 +73,7 @@ interface MapApi {
         const val BASE_URL = "https://maps.googleapis.com/maps/"
     }
 
-    @GET("api/directions/json?key=AIzaSyA0l4h00ckGmNPsBOLQpz3zr7Xk7Q2xC4E")
+    @GET("api/directions/json?key=AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0")
     fun getDistanceAsync(
         @Query("units") units: String = "metric",
         @Query("origin") origin: String,
@@ -81,7 +81,7 @@ interface MapApi {
         @Query("mode") mode: String = "walking"
     ): Deferred<MapResult>
 
-    @GET("api/directions/json?key=AIzaSyA0l4h00ckGmNPsBOLQpz3zr7Xk7Q2xC4E")
+    @GET("api/directions/json?key=AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0")
     fun getDistanceForDrivingAsync(
         @Query("units") units: String = "metric",
         @Query("origin") origin: String,
