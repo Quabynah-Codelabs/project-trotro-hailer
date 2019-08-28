@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import dev.trotrohailer.shared.BuildConfig
 import kotlinx.coroutines.Deferred
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -73,7 +74,7 @@ interface MapApi {
     }
 
     @GET("api/directions/json?key=AIzaSyA0l4h00ckGmNPsBOLQpz3zr7Xk7Q2xC4E")
-    fun getDistance(
+    fun getDistanceAsync(
         @Query("units") units: String = "metric",
         @Query("origin") origin: String,
         @Query("destination") destination: String,
@@ -81,7 +82,7 @@ interface MapApi {
     ): Deferred<MapResult>
 
     @GET("api/directions/json?key=AIzaSyA0l4h00ckGmNPsBOLQpz3zr7Xk7Q2xC4E")
-    fun getDistanceForDriving(
+    fun getDistanceForDrivingAsync(
         @Query("units") units: String = "metric",
         @Query("origin") origin: String,
         @Query("destination") destination: String,
@@ -101,7 +102,7 @@ class MapService {
     }
 
     private val file by lazy {
-        File("${Environment.getDataDirectory()}/Companion/distance_network_cache").apply {
+        File("${Environment.getDataDirectory()}/${BuildConfig.LIBRARY_PACKAGE_NAME}/distance_network_cache").apply {
             if (!mkdirs()) mkdirs()
         }
     }

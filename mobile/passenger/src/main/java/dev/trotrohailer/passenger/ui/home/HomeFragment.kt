@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
@@ -39,12 +39,48 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
-
+        /* val mapFragment =
+             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
+         mapFragment?.getMapAsync(this)*/
+        binding.map.onCreate(savedInstanceState)
+        binding.map.getMapAsync(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.map.onPause()
+    }
+
+    override fun onDestroy() {
+        if (map != null) this.customMap.removeFrom(map)
+        super.onDestroy()
+        binding.map.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.map.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.map.onSaveInstanceState(outState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.map.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.map.onStop()
+    }
 
     // Locations
     private var pickupLocation: LatLng = LatLng(5.556, -0.231)
@@ -86,6 +122,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(pickupLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
             )
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLocation, 15.0f))
             binding.confirmPickup.invisible()
@@ -97,6 +134,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(dropoffLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
             )
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 15.0f))
 
@@ -108,11 +146,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 )
             )
         }
-    }
-
-    override fun onDestroy() {
-        if (map != null) this.customMap.removeFrom(map)
-        super.onDestroy()
     }
 
 }

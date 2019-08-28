@@ -38,11 +38,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        /*mMap.setMapStyle(
+        mMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.mapstyle_uberx
             )
-        )*/
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17.0f))
+        )
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15.0f))
     }
 }

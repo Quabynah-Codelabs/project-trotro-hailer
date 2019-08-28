@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.google.maps.android.PolyUtil
 import dev.trotrohailer.passenger.databinding.RequestRideBottomSheetBinding
 import dev.trotrohailer.passenger.databinding.RequestTripFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
@@ -47,9 +51,6 @@ class RequestTripFragment : MainNavigationFragment() {
         debugger("DropOff: $dropoff")
 
         if (pickup != null && dropoff != null) {
-            val mapApi: MapApi = get()
-            val mapService: MapService = get()
-
             ioScope.launch {
                 // Get pickup address
                 val pickupAddress: String = geocoder.getFromLocation(
@@ -68,7 +69,33 @@ class RequestTripFragment : MainNavigationFragment() {
                 debugger("Pickup address: $pickupAddress")
                 debugger("DropOff address: $dropOffAddress")
 
-                // Get metrics for distance
+                // Get metrics for distance and duration
+//                val mapApi: MapApi = get()
+//                val mapService: MapService = get()
+                /*try {
+                    val mapResult = mapApi.getDistanceForDrivingAsync(
+                        origin = "${pickup.latitude},${pickup.longitude}",
+                        destination = "${dropoff.latitude}, ${dropoff.longitude}"
+                    ).await()
+                    val distance = mapResult.routes[0].legs[0].distance
+                    val duration = mapResult.routes[0].legs[0].duration
+
+                    debugger("Distance: $distance")
+                    debugger("Duration: $duration")
+                } catch (e: Exception) {
+                    debugger(e.localizedMessage)
+                    Snackbar.make(
+                        binding.container,
+                        "Cannot get distance and duration.",
+                        Snackbar.LENGTH_LONG
+                    )
+                        .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
+                            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                findNavController().popBackStack()
+                            }
+                        })
+                        .show()
+                }*/
 
                 uiScope.launch {
                     bottomSheetBinding.apply {
