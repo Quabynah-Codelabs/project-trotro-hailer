@@ -11,9 +11,9 @@
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />
 
-      <variable
-          name="prefs"
-          type="dev.trotrohailer.passenger.util.prefs.PaymentPrefs" />
+        <variable
+            name="prefs"
+            type="dev.trotrohailer.passenger.util.prefs.PaymentPrefs" />
 
     </data>
 
@@ -28,8 +28,8 @@
             style="@style/Widget.IOSched.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,104 +41,112 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/container"
+        <dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_normal"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <ImageView
-                android:id="@+id/user_avatar"
-                android:layout_width="@dimen/large_avatar_size"
-                android:layout_height="@dimen/large_avatar_size"
-                android:src="@drawable/ic_default_avatar_2"
-                app:avatar="@{viewModel.passenger.avatar}"
-                app:clipToCircle="@{true}" />
-
-            <TextView
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_normal"
-                android:fontFamily="@font/google_sans_medium"
-                android:gravity="center"
-                android:padding="@dimen/spacing_micro"
-                android:text="@{viewModel.passenger.name}"
-                android:textAppearance="?textAppearanceHeadline6"
-                tools:text="@tools:sample/lorem" />
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_normal">
 
+                <ImageView
+                    android:id="@+id/user_avatar"
+                    android:layout_width="@dimen/large_avatar_size"
+                    android:layout_height="@dimen/large_avatar_size"
+                    android:src="@drawable/ic_default_avatar_2"
+                    app:avatar="@{viewModel.passenger.avatar}"
+                    app:clipToCircle="@{true}" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:alpha="?alphaMedium"
-                android:fontFamily="@font/google_sans"
-                android:gravity="center"
-                android:text="@{viewModel.passenger.phone == `` ? `No phone number` : viewModel.passenger.phone, default=`No phone number`}"
-                android:textAppearance="?textAppearanceSubtitle2"
-                tools:text="@tools:sample/lorem" />
-
-            <View
-                android:layout_width="@dimen/nav_drawer_width"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/large_avatar_size"
-                android:layout_marginTop="@dimen/padding_normal"
-                android:layout_marginEnd="@dimen/large_avatar_size"
-                android:layout_marginBottom="@dimen/padding_normal"
-                android:background="@color/grey_divider" />
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:gravity="center"
+                    android:padding="@dimen/spacing_micro"
+                    android:text="@{viewModel.passenger.name}"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    tools:text="@tools:sample/lorem" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="@dimen/padding_normal"
-                        android:layout_marginTop="@dimen/padding_normal"
-                        android:fontFamily="@font/google_sans_medium"
-                        android:text="Payment Methods"
-                        android:textStyle="bold" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:alpha="?alphaMedium"
+                    android:fontFamily="@font/google_sans"
+                    android:gravity="center"
+                    android:text="@{viewModel.passenger.phone == `` ? `No phone number` : viewModel.passenger.phone, default=`No phone number`}"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    tools:text="@tools:sample/lorem" />
+
+                <View
+                    android:layout_width="@dimen/nav_drawer_width"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/large_avatar_size"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    android:layout_marginEnd="@dimen/large_avatar_size"
+                    android:layout_marginBottom="@dimen/padding_normal"
+                    android:background="@color/grey_divider" />
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/spacing_micro"
-                        android:alpha="?alphaMedium"
-                        android:clickable="false"
-                        android:gravity="center"
-                        android:text="No payment methods available"
-                        android:textColor="?colorPrimary"
-                        app:goneUnless="@{prefs.paymentMethod != null}" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="?actionBarSize"
-                        android:layout_margin="@dimen/spacing_normal"
-                        android:drawablePadding="@dimen/padding_normal"
-                        android:fontFamily="@font/google_sans_medium"
-                        android:gravity="center_vertical"
-                        android:text="@{prefs.paymentMethod}"
-                        android:textAppearance="?textAppearanceBody2"
-                        app:goneUnless="@{prefs.paymentMethod == null}"
-                        tools:text="@tools:sample/lorem" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="@dimen/padding_normal"
+                            android:layout_marginTop="@dimen/padding_normal"
+                            android:fontFamily="@font/google_sans_medium"
+                            android:text="Payment Methods"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/spacing_micro"
+                            android:alpha="?alphaMedium"
+                            android:clickable="false"
+                            android:gravity="center"
+                            android:text="No payment methods available"
+                            android:textColor="?colorPrimary"
+                            android:visibility="@{prefs.paymentMethod != null ? View.GONE : View.VISIBLE, default=`visible`}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="?actionBarSize"
+                            android:layout_marginTop="@dimen/spacing_normal"
+                            android:drawablePadding="@dimen/padding_normal"
+                            android:fontFamily="@font/google_sans"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="@dimen/padding_normal"
+                            android:text="@{prefs.paymentMethod}"
+                            android:textAppearance="?textAppearanceBody2"
+                            android:visibility="@{prefs.paymentMethod == null ? View.GONE : View.VISIBLE, default=`visible`}"
+                            tools:text="@tools:sample/lorem" />
 
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.core.widget.NestedScrollView>
+                </androidx.core.widget.NestedScrollView>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"

@@ -13,9 +13,6 @@
             name="user"
             type="dev.trotrohailer.shared.data.Passenger" />
 
-        <!--<variable
-            name="viewModel"
-            type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />-->
         <variable
             name="viewModel"
             type="dev.trotrohailer.passenger.ui.settings.SettingsViewModel" />

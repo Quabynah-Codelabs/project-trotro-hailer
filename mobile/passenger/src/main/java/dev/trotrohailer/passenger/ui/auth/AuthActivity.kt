@@ -4,16 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import dev.trotrohailer.passenger.ui.home.MainActivity
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
+import dev.trotrohailer.shared.BuildConfig.DEBUG
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.databinding.ActivityAuthBinding
 import dev.trotrohailer.shared.util.debugger
@@ -21,7 +20,6 @@ import dev.trotrohailer.shared.util.intentTo
 import dev.trotrohailer.shared.util.mapToPassenger
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
-import dev.trotrohailer.passenger.R as appR
 import dev.trotrohailer.shared.R as sharedR
 
 class AuthActivity : BaseActivity() {
@@ -37,12 +35,12 @@ class AuthActivity : BaseActivity() {
     }
 
     // Sign in options for Google Auth
-    private val gso by lazy {
+    /*private val gso by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestIdToken(getString(appR.string.default_web_client_id))
             .build()
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,17 +53,58 @@ class AuthActivity : BaseActivity() {
 
     // Start Google Login
     private fun startGoogleAuth() {
-        with(GoogleSignIn.getClient(this, gso)) {
-            startActivityForResult(this.signInIntent, RC_GOOGLE_AUTH)
-        }
+        val authIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(
+                mutableListOf(
+                    AuthUI.IdpConfig.PhoneBuilder()
+                            // todo: change default device number
+                        .setDefaultNumber("gh", "554024702")
+                        .build()
+                )
+            )
+            .setIsSmartLockEnabled(DEBUG, true)
+            .setTosAndPrivacyPolicyUrls(
+                "https://superapp.example.com/terms-of-service.html",
+                "https://superapp.example.com/privacy-policy.html"
+            )
+            .build()
+        startActivityForResult(authIntent, RC_AUTH)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_GOOGLE_AUTH) {
+        if (requestCode == RC_AUTH) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    val response = IdpResponse.fromResultIntent(data)
+                    if (response == null) {
+                        debugger("Login failed")
+                        snackbar.show()
+                    } else if (response.error?.errorCode == ErrorCodes.NO_NETWORK) {
+                        debugger("Login failed. No network")
+                        snackbar.setText("Please check your internet connection").show()
+                    } else {
+                        val phoneNumber = response.phoneNumber
+                        // Login to Hyper Track with credentials
+                        debugger("Phone number after successful login: $phoneNumber")
+
+                        // Get firebase auth instance
+                        val auth: FirebaseAuth = get()
+
+                        // get the current user
+                        val currentUser = auth.currentUser
+                        if (currentUser == null) {
+                            debugger("Current user is null")
+                            snackbar.show()
+                        } else {
+                            // Sign in user
+                            updateUI(currentUser)
+                        }
+                    }
+
+
+                    /*val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                     try {
                         // Google Sign In was successful, authenticate with Firebase
                         val account = task.getResult(ApiException::class.java)
@@ -74,7 +113,7 @@ class AuthActivity : BaseActivity() {
                         // Google Sign In failed, update UI appropriately
                         debugger("Login failed")
                         snackbar.show()
-                    }
+                    }*/
                 }
 
                 else -> {
@@ -88,7 +127,7 @@ class AuthActivity : BaseActivity() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+    /*private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         debugger("Logging in with email: ${acct.email}")
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
 
@@ -110,7 +149,7 @@ class AuthActivity : BaseActivity() {
                     updateUI(null)
                 }
             }
-    }
+    }*/
 
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if (firebaseUser == null) {
@@ -123,6 +162,6 @@ class AuthActivity : BaseActivity() {
     }
 
     companion object {
-        private const val RC_GOOGLE_AUTH = 88
+        private const val RC_AUTH = 88
     }
 }

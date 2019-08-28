@@ -48,24 +48,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
-        <!--<com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:cameraBearing="@dimen/map_camera_bearing"
-            app:cameraTargetLat="@dimen/map_camera_target_lat"
-            app:cameraTargetLng="@dimen/map_camera_target_lng"
-            app:cameraTilt="@dimen/map_camera_tilt"
-            app:cameraZoom="@dimen/map_camera_zoom"
-            app:isIndoorEnabled="@{false}"
-            app:isMapToolbarEnabled="@{false}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:uiCompass="false"
-            app:uiZoomControls="false" />-->
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

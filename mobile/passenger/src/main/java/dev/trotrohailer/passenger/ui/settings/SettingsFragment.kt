@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuth
+import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.SettingsFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.prefs.PaymentPrefs
 import dev.trotrohailer.shared.util.debugger
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 
 class SettingsFragment : MainNavigationFragment() {
@@ -26,11 +29,35 @@ class SettingsFragment : MainNavigationFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        // Get firebase auth instance
+        val auth: FirebaseAuth = get()
+
+        // Add different colors for the swipe refresh action
+        val colorResIds: IntArray = requireContext().resources.getIntArray(R.array.swipe_refresh)
+        binding.swipeRefresh.setColorSchemeColors(*colorResIds)
+
+        // Allow swipe to refresh user information
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getUser(auth.currentUser?.uid!!, true)
+                .observe(viewLifecycleOwner, Observer { user ->
+                    debugger("Refreshed user: $user")
+                    binding.viewModel = viewModel
+                    binding.swipeRefresh.isRefreshing = false
+                })
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // get live updates of current user
         viewModel.passenger.observe(viewLifecycleOwner, Observer { passenger ->
             binding.viewModel = viewModel
-            debugger("Observing passenger from settings page: ${passenger.id}")
+            debugger("Observing passenger from settings page: $passenger")
         })
 
+        // get payment method for this user
         prefs.paymentMethod.observe(viewLifecycleOwner, Observer { method ->
             debugger("Payment method: $method")
             binding.prefs = prefs

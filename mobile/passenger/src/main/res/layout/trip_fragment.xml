@@ -44,8 +44,8 @@
         <dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:swipeRefreshColors="@{@intArray/swipe_refresh}">
+            android:id="@+id/swipe_refresh"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <FrameLayout
                 android:layout_width="match_parent"

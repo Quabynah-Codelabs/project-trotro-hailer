@@ -23,6 +23,9 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import dev.trotrohailer.passenger.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 /**
  * To be implemented by components that host top-level navigation destinations.
@@ -48,6 +51,9 @@ interface NavigationDestination {
  */
 open class MainNavigationFragment : Fragment(),
     NavigationDestination {
+    private val job = Job()
+    val ioScope = CoroutineScope(Dispatchers.IO)
+    val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     protected var navigationHost: NavigationHost? = null
 
@@ -56,6 +62,11 @@ open class MainNavigationFragment : Fragment(),
         if (context is NavigationHost) {
             navigationHost = context
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     override fun onDetach() {

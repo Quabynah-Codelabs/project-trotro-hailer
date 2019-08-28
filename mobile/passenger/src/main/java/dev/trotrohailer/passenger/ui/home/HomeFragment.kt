@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
+import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 
 class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
@@ -28,50 +29,14 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        binding.map.onCreate(savedInstanceState)
-//        binding.map.getMapAsync(this)
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
     }
 
-    /*override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        binding.map.onSaveInstanceState(outState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.map.onResume()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.map.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.map.onLowMemory()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        binding.map.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.map.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.map.onStop()
-    }*/
-
     override fun onMapReady(googleMap: GoogleMap?) {
+        debugger("Starting maps...")
         map = googleMap
         map?.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
@@ -79,8 +44,8 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 R.raw.mapstyle_uberx
             )
         )
-        customMap.addTo(map)
-        customMap.moveToMyLocation(map)
+//        customMap.addTo(map)
+//        customMap.moveToMyLocation(map)
     }
 
     override fun onDestroy() {

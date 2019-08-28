@@ -56,9 +56,9 @@ class PassengerRepository constructor(
         }
 
     override suspend fun saveUser(user: Passenger) = withContext(Dispatchers.IO) {
+        passengerDao.insert(user)
         try {
             Tasks.await(db.passengerDocument(user.id).set(user, SetOptions.merge()))
-            passengerDao.insert(user)
             null
         } catch (e: Exception) {
             debugger(e.localizedMessage)
