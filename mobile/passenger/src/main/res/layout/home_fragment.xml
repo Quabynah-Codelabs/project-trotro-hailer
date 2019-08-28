@@ -53,44 +53,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirm_pickup"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
+                android:layout_height="?actionBarSize"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginStart="@dimen/padding_large"
                 android:layout_marginEnd="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_normal"
-                android:background="@drawable/button_cornered"
-                android:backgroundTint="@color/teal"
+                android:layout_marginBottom="@dimen/padding_large"
                 android:gravity="center"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:text="Confirm"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/normalText_sp_14"
-                android:textStyle="bold"
+                android:fontFamily="@font/google_sans_medium"
+                android:paddingStart="@dimen/padding_large"
+                android:paddingEnd="@dimen/padding_large"
+                android:text="@string/confirm_pickup"
                 android:visibility="invisible" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirm_drop_off"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
+                android:layout_height="?actionBarSize"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginStart="@dimen/padding_large"
                 android:layout_marginEnd="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_normal"
-                android:background="@drawable/button_cornered"
-                android:backgroundTint="@color/deep_sky_blue"
+                android:layout_marginBottom="@dimen/padding_large"
                 android:gravity="center"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:text="Confirm Destination"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/normalText_sp_14"
-                android:textStyle="bold"
+                android:fontFamily="@font/google_sans_medium"
+                android:paddingStart="@dimen/padding_large"
+                android:paddingEnd="@dimen/padding_large"
+                android:text="@string/confirm_dropoff"
                 android:visibility="invisible" />
 
         </FrameLayout>

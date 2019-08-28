@@ -25,7 +25,7 @@ import dev.trotrohailer.shared.R;
 
 
 public class MyLocationGoogleMap {
-    public static final String LOGTAG = "Tracking";
+    public static final String LOGTAG = "TroTro";
 
     public static final String ACCURACY_COLOR = "#1800ce5b";
     public static final String ACCURACY_COLOR_BORDERS = "#8000ce5b";
@@ -76,7 +76,7 @@ public class MyLocationGoogleMap {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("VSDK.onLocationChanged",
+                        Log.e(LOGTAG,
                                 location.getLatitude() + " | " +
                                         location.getLongitude() + " | " +
                                         location.getBearing());
@@ -158,5 +158,9 @@ public class MyLocationGoogleMap {
             mLocationProvider = null;
         }
         isMyLocationCentered = false;
+    }
+
+    public Location getLastLocation() {
+        return mLocationProvider == null ? null : mLocationProvider.getLastKnownLocation();
     }
 }

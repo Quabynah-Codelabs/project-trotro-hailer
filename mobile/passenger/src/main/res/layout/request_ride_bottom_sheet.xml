@@ -11,8 +11,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/white"
             android:elevation="6dp"
-            android:orientation="vertical"
-            android:theme="@style/AppTheme.Transparent">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"

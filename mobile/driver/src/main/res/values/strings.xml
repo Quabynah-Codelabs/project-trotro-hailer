@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Trotro Hailer</string>
+    <string name="title_activity_home">TroTro Driver</string>
 </resources>

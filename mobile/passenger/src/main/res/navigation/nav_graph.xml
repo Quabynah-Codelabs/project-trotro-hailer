@@ -12,7 +12,16 @@
         tools:layout="@layout/home_fragment" >
         <action
             android:id="@+id/action_navigation_home_to_navigation_request_trips"
-            app:destination="@id/navigation_request_trips" />
+            app:destination="@id/navigation_request_trips"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="extra_pickup"
+            app:argType="com.google.android.gms.maps.model.LatLng"/>
+        <argument
+            android:name="extra_dropoff"
+            app:argType="com.google.android.gms.maps.model.LatLng"/>
     </fragment>
     <fragment
         android:id="@id/navigation_settings"
@@ -50,5 +59,10 @@
         android:id="@id/navigation_request_trips"
         android:name="dev.trotrohailer.passenger.ui.trip.RequestTripFragment"
         android:label="Request Trip"
-        tools:layout="@layout/request_trip_fragment"/>
+        tools:layout="@layout/request_trip_fragment">
+        <action
+            android:id="@+id/action_navigation_request_trips_to_navigation_home"
+            app:popUpTo="@id/navigation_home" />
+
+    </fragment>
 </navigation>

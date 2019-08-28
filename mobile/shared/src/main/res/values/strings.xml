@@ -36,4 +36,6 @@
     <string name="pickup">pickup</string>
     <string name="duration">Duration</string>
     <string name="distance">Distance</string>
+    <string name="confirm_pickup">Confirm Pickup</string>
+    <string name="confirm_dropoff">Confirm dropoff</string>
 </resources>
