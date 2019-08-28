@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.OnMapReadyCallback
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import dev.trotrohailer.passenger.R
-import dev.trotrohailer.passenger.databinding.RequestRideBottomSheetBinding
 import dev.trotrohailer.passenger.databinding.RequestTripFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
+import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.util.debugger
 import kotlinx.coroutines.launch
 import java.util.*
@@ -20,7 +21,6 @@ import dev.trotrohailer.shared.R as sharedR
 class RequestTripFragment : MainNavigationFragment() {
 
     private lateinit var binding: RequestTripFragmentBinding
-    private lateinit var bottomSheetBinding: RequestRideBottomSheetBinding
     private lateinit var viewModel: TripViewModel
 
     private val geocoder by lazy { Geocoder(requireContext(), Locale.getDefault()) }
@@ -37,9 +37,7 @@ class RequestTripFragment : MainNavigationFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TripViewModel::class.java)
 
-        bottomSheetBinding =
-            RequestRideBottomSheetBinding.inflate(layoutInflater, null, false)
-
+        // Get arguments from previous fragment
         val dropoff = arguments?.get("extra_dropoff") as? LatLng
         val pickup = arguments?.get("extra_pickup") as? LatLng
 
@@ -47,6 +45,7 @@ class RequestTripFragment : MainNavigationFragment() {
         debugger("Pickup: $pickup")
         debugger("DropOff: $dropoff")
 
+        // Setup UI
         if (pickup != null && dropoff != null) {
             ioScope.launch {
                 // Get pickup address
@@ -98,7 +97,6 @@ class RequestTripFragment : MainNavigationFragment() {
                     binding.map.onCreate(savedInstanceState)
                     binding.map.getMapAsync { map ->
                         with(map) {
-                            map.clear()
                             setMapStyle(
                                 MapStyleOptions.loadRawResourceStyle(
                                     requireContext(),
@@ -124,6 +122,9 @@ class RequestTripFragment : MainNavigationFragment() {
                                     .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
                             ).showInfoWindow()
 
+                            // Move camera to drop off location
+                            animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 19.0f))
+
                             addPolyline(
                                 PolylineOptions()
                                     .addAll(mutableListOf(pickup, dropoff))
@@ -133,13 +134,23 @@ class RequestTripFragment : MainNavigationFragment() {
                         }
                     }
 
-
-                    with(bottomSheetBinding) {
-                        tvPickupLocationText.text = pickupAddress
+                    // Get bottom sheet
+                    with(binding) {
+                        tvDistance.text = "12km"
+                        tvTime.text = "25 mins"
+                        tvPrice.text = "GHS 18.50"
+                        tvPickupLocationText.text =
+                            pickupAddress
                         tvDropoffLocationText.text = dropOffAddress
+                        btBookRide.setOnClickListener {
+                            toast("Hello book ride")
+                        }
                     }
                 }
             }
+        } else {
+            toast("Unable to setup your routes")
+            findNavController().popBackStack()
         }
     }
 
@@ -168,14 +179,14 @@ class RequestTripFragment : MainNavigationFragment() {
         binding.map.onSaveInstanceState(outState)
     }
 
-   /* override fun onStart() {
-        super.onStart()
-        binding.map.onStart()
-    }
+    /* override fun onStart() {
+         super.onStart()
+         binding.map.onStart()
+     }
 
-    override fun onStop() {
-        super.onStop()
-        binding.map.onStop()
-    }*/
+     override fun onStop() {
+         super.onStop()
+         binding.map.onStop()
+     }*/
 
 }

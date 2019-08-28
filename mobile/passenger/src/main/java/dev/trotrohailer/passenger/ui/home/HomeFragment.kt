@@ -46,6 +46,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         binding.map.onResume()
+        binding.map.getMapAsync(this)
     }
 
     override fun onPause() {
@@ -119,9 +120,9 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(pickupLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondrive))
             )
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLocation, 15.0f))
+            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLocation, 19.0f))
             binding.confirmPickup.invisible()
             binding.confirmDropOff.visible()
         }
@@ -131,11 +132,11 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(dropoffLocation)
-                    .title("You")
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconsource_marker))
             )
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 15.0f))
+            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 19.0f))
 
+            // todo: find driver and navigate to book ride page
             // Navigation
             findNavController().navigate(
                 R.id.navigation_request_trips, bundleOf(
