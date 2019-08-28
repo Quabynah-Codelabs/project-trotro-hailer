@@ -6,6 +6,7 @@ apply from: '../aac.gradle'
 apply from: '../app.gradle'
 apply from: '../location.gradle'
 apply from: '../firebase.gradle'
+apply from: '../network.gradle'
 apply from: 'https://raw.githubusercontent.com/passsy/gradle-GitVersioner/master/git-versioner.gradle'
 
 android {

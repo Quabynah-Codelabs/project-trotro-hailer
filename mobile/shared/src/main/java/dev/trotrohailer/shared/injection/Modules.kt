@@ -11,8 +11,9 @@ import dev.trotrohailer.shared.datasource.DriverRepository
 import dev.trotrohailer.shared.datasource.PassengerRepository
 import dev.trotrohailer.shared.datasource.UserRepository
 import dev.trotrohailer.shared.util.Constants
+import dev.trotrohailer.shared.util.location.metrics.MapApi
+import dev.trotrohailer.shared.util.location.metrics.MapService
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -44,6 +45,9 @@ val appModule = module {
             get()
         )
     }
+
+    single { MapService.getInstance() }
+    single { get<MapService>().getService() as MapApi }
 
     single<UserRepository<Driver>>(named(Constants.DRIVERS)) { DriverRepository(get(), get()) }
 }

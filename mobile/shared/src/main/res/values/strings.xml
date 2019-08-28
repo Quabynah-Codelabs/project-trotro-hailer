@@ -38,4 +38,6 @@
     <string name="distance">Distance</string>
     <string name="confirm_pickup">Confirm Pickup</string>
     <string name="confirm_dropoff">Confirm dropoff</string>
+
+<!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0</string>-->
 </resources>

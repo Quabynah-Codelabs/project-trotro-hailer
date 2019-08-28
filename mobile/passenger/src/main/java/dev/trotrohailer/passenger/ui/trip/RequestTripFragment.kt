@@ -11,7 +11,10 @@ import dev.trotrohailer.passenger.databinding.RequestRideBottomSheetBinding
 import dev.trotrohailer.passenger.databinding.RequestTripFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.shared.util.debugger
+import dev.trotrohailer.shared.util.location.metrics.MapApi
+import dev.trotrohailer.shared.util.location.metrics.MapService
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import java.util.*
 
 class RequestTripFragment : MainNavigationFragment() {
@@ -44,6 +47,9 @@ class RequestTripFragment : MainNavigationFragment() {
         debugger("DropOff: $dropoff")
 
         if (pickup != null && dropoff != null) {
+            val mapApi: MapApi = get()
+            val mapService: MapService = get()
+
             ioScope.launch {
                 // Get pickup address
                 val pickupAddress: String = geocoder.getFromLocation(
@@ -61,6 +67,8 @@ class RequestTripFragment : MainNavigationFragment() {
 
                 debugger("Pickup address: $pickupAddress")
                 debugger("DropOff address: $dropOffAddress")
+
+                // Get metrics for distance
 
                 uiScope.launch {
                     bottomSheetBinding.apply {
