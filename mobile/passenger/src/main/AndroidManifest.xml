@@ -32,7 +32,7 @@
 
         <activity
             android:name="dev.trotrohailer.passenger.ui.home.MainActivity"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

@@ -39,9 +39,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        /* val mapFragment =
-             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-         mapFragment?.getMapAsync(this)*/
         binding.map.onCreate(savedInstanceState)
         binding.map.getMapAsync(this)
     }
@@ -134,6 +131,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(dropoffLocation)
+                    .title("You")
                     .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
             )
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 15.0f))

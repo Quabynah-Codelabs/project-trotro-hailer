@@ -31,13 +31,14 @@
     <string name="title_settings">Settings</string>
     <string name="title_about">About</string>
     <string name="title_profile">Profile</string>
+    <string name="title_request_trip">Request Driver</string>
     <string name="developer">Developed by <b>Efe Hays (Mrs.)</b>\nAll rights reserved © (2019)</string>
-    <string name="dropoff">dropoff</string>
-    <string name="pickup">pickup</string>
+    <string name="dropoff">Drop-Off</string>
+    <string name="pickup">Pickup</string>
     <string name="duration">Duration</string>
     <string name="distance">Distance</string>
     <string name="confirm_pickup">Confirm Pickup</string>
     <string name="confirm_dropoff">Confirm dropoff</string>
 
-<!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0</string>-->
+    <!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0</string>-->
 </resources>
