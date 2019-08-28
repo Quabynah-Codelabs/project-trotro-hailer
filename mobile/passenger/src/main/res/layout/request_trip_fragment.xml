@@ -10,8 +10,12 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
         android:fitsSystemWindows="true"
-        android:layout_height="match_parent">
+        android:theme="@style/AppTheme.Transparent">
+
+        <include layout="@layout/request_ride_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

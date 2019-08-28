@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/onboarding_animation_padding"
         android:orientation="horizontal"
+        android:background="@color/white"
         android:padding="@dimen/padding_normal">
 
         <ImageView

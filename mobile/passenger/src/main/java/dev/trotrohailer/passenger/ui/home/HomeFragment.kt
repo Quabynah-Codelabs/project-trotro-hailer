@@ -8,9 +8,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.hypertrack.sdk.HyperTrack
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
+import dev.trotrohailer.shared.BuildConfig
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 
@@ -44,8 +46,19 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 R.raw.mapstyle_uberx
             )
         )
-//        customMap.addTo(map)
-//        customMap.moveToMyLocation(map)
+        customMap.addTo(map)
+        customMap.moveToMyLocation(map)
+
+        // Initialize HyperTrack here
+        HyperTrack.initialize(requireActivity(), BuildConfig.HYPER_TRACK_PUB_KEY)
+        HyperTrack.enableMockLocation()
+        HyperTrack.tripMarker(
+            hashMapOf<String, Any?>(
+                Pair("user", "Quabynah Bilson"),
+                Pair("previousOwner", mutableListOf<String>()),
+                Pair("price", 12.99)
+            )
+        )
     }
 
     override fun onDestroy() {
