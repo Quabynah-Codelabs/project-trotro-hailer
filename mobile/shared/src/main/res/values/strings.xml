@@ -32,4 +32,8 @@
     <string name="title_about">About</string>
     <string name="title_profile">Profile</string>
     <string name="developer">Developed by <b>Efe Hays (Mrs.)</b>\nAll rights reserved © (2019)</string>
+    <string name="dropoff">dropoff</string>
+    <string name="pickup">pickup</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
 </resources>
