@@ -96,7 +96,7 @@ class RequestTripFragment : MainNavigationFragment() {
 
                 uiScope.launch {
                     binding.map.onCreate(savedInstanceState)
-                    binding.map.getMapAsync(OnMapReadyCallback { map ->
+                    binding.map.getMapAsync { map ->
                         with(map) {
                             map.clear()
                             setMapStyle(
@@ -131,7 +131,7 @@ class RequestTripFragment : MainNavigationFragment() {
                                     .endCap(SquareCap())
                             )
                         }
-                    })
+                    }
 
 
                     with(bottomSheetBinding) {
