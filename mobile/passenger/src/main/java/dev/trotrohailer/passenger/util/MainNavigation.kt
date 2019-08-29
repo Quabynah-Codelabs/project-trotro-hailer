@@ -82,6 +82,7 @@ open class MainNavigationFragment : Fragment(),
         mainToolbar.apply {
             host.registerToolbarWithNavigation(this)
         }
+        setHasOptionsMenu(true)
     }
 }
 

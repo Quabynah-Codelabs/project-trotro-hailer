@@ -92,4 +92,6 @@ class SettingsViewModel constructor(
         view.toast("Profile information updated successfully")
         Navigation.findNavController(view).popBackStack()
     }
+
+    fun logout(view: View) = repository.logoutUser(view.context)
 }

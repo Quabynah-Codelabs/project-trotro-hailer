@@ -140,6 +140,15 @@
                             android:visibility="@{prefs.paymentMethod == null ? View.GONE : View.VISIBLE, default=`visible`}"
                             tools:text="@tools:sample/lorem" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="@dimen/lottie_anim_size"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/padding_xlarge"
+                            android:gravity="center"
+                            android:id="@+id/logout"
+                            android:text="Sign out"/>
+
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

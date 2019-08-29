@@ -1,5 +1,7 @@
 package dev.trotrohailer.shared.datasource
 
+import android.content.Context
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -86,5 +88,9 @@ class PassengerRepository constructor(
             debugger(e.localizedMessage)
             null
         }
+    }
+
+    fun logoutUser(context: Context) {
+        AuthUI.getInstance().signOut(context).addOnCompleteListener { }.addOnFailureListener { }
     }
 }

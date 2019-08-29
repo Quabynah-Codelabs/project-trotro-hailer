@@ -1,5 +1,6 @@
 package dev.trotrohailer.passenger.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.SettingsFragmentBinding
+import dev.trotrohailer.passenger.ui.auth.AuthActivity
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.prefs.PaymentPrefs
 import dev.trotrohailer.shared.util.debugger
@@ -45,6 +47,15 @@ class SettingsFragment : MainNavigationFragment() {
                     binding.viewModel = viewModel
                     binding.swipeRefresh.isRefreshing = false
                 })
+        }
+
+        binding.logout.setOnClickListener {
+            viewModel.logout(it)
+            prefs.removePayment()
+            startActivity(Intent(requireContext(), AuthActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            })
+            requireActivity().finishAffinity()
         }
     }
 

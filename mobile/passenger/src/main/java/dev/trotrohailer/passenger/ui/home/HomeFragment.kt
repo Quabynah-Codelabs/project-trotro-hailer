@@ -100,8 +100,8 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     }
 
     // Locations
-    private var pickupLocation: LatLng = LatLng(5.556, -0.231)
-    private var dropoffLocation: LatLng = LatLng(5.556, -0.231)
+    private var pickupLocation: LatLng = BuildConfig.MAP_VIEWPORT_BOUND_SW
+    private var dropoffLocation: LatLng = BuildConfig.MAP_VIEWPORT_BOUND_NE
 
     override fun onMapReady(googleMap: GoogleMap?) {
         debugger("Starting maps...")
