@@ -1,9 +1,7 @@
 package dev.trotrohailer.passenger.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,6 +15,7 @@ import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
+import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.data.Coordinate
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.invisible
@@ -41,6 +40,20 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState)
         binding.map.onCreate(savedInstanceState)
         binding.map.getMapAsync(this)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_item_search) {
+            toast("Hello search")
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 
     override fun onResume() {

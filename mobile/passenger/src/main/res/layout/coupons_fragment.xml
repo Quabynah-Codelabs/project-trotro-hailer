@@ -46,26 +46,25 @@
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
                 airbnb:layout_constraintBottom_toBottomOf="parent"
                 airbnb:layout_constraintTop_toTopOf="parent"
                 airbnb:lottie_autoPlay="true"
-                airbnb:lottie_loop="true"
-                airbnb:lottie_fileName="no_coupon.json" />
+                airbnb:lottie_fileName="no_coupon.json"
+                airbnb:lottie_loop="true" />
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_micro"
+                android:layout_marginTop="@dimen/padding_large"
                 android:alpha="?alphaMedium"
                 android:clickable="false"
-                android:gravity="center"
                 android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
                 android:text="You have no coupons available"
                 android:textColor="?colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/animationView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
