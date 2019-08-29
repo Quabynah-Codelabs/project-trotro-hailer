@@ -83,27 +83,29 @@ class RequestTripFragment : MainNavigationFragment() {
         if (pickup != null && dropoff != null) {
             snackbar.show()
             ioScope.launch {
-                // Get pickup address
-                val pickupAddress: String = geocoder.getFromLocation(
-                    pickup.latitude,
-                    pickup.longitude,
-                    2
-                )[0].getAddressLine(0)
 
-                // Get drop off address
-                val dropOffAddress: String = geocoder.getFromLocation(
-                    dropoff.latitude,
-                    dropoff.longitude,
-                    2
-                )[0].getAddressLine(0)
-
-                // todo: debugging
-                debugger("Pickup address: $pickupAddress")
-                debugger("DropOff address: $dropOffAddress")
-
-                // Get metrics for distance and duration
-                val mapApi: MapApi = get()
                 try {
+                    // Get pickup address
+                    val pickupAddress: String = geocoder.getFromLocation(
+                        pickup.latitude,
+                        pickup.longitude,
+                        2
+                    )[0].getAddressLine(0)
+
+                    // Get drop off address
+                    val dropOffAddress: String = geocoder.getFromLocation(
+                        dropoff.latitude,
+                        dropoff.longitude,
+                        2
+                    )[0].getAddressLine(0)
+
+                    // todo: debugging
+                    debugger("Pickup address: $pickupAddress")
+                    debugger("DropOff address: $dropOffAddress")
+
+                    // Get metrics for distance and duration
+                    val mapApi: MapApi = get()
+
                     // Get distance and duration metrics
                     val mapResult = mapApi.getDistanceForDrivingAsync(
                         origin = "${pickup.latitude},${pickup.longitude}",

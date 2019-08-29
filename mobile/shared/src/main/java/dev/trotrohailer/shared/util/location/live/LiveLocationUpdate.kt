@@ -45,8 +45,10 @@ class LiveLocationUpdate(private val host: AppCompatActivity) : LifecycleOwner, 
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         buildApiClient()
-        LocationServices.getFusedLocationProviderClient(host).lastLocation.addOnCompleteListener(host){
-            if (it.isSuccessful){
+        LocationServices.getFusedLocationProviderClient(host).lastLocation.addOnCompleteListener(
+            host
+        ) {
+            if (it.isSuccessful) {
                 _liveLocation.value = it.result
             }
         }
