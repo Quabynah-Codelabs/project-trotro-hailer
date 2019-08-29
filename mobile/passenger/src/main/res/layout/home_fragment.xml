@@ -33,10 +33,10 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:elevation="@dimen/zero_spacing"
-            app:menu="@menu/home_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/status_bar"
+            app:menu="@menu/home_menu"
             app:title="@string/title_home"
             tools:navigationIcon="@drawable/ic_menu" />
 
@@ -49,10 +49,10 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <com.google.android.gms.maps.MapView
+                android:id="@+id/map"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/map"/>
-            
+                android:layout_height="match_parent" />
+
             <!--<fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -67,8 +67,8 @@
                 android:layout_marginStart="@dimen/padding_large"
                 android:layout_marginEnd="@dimen/padding_large"
                 android:layout_marginBottom="@dimen/padding_large"
-                android:gravity="center"
                 android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
                 android:paddingStart="@dimen/padding_large"
                 android:paddingEnd="@dimen/padding_large"
                 android:text="@string/confirm_pickup"
@@ -82,8 +82,8 @@
                 android:layout_marginStart="@dimen/padding_large"
                 android:layout_marginEnd="@dimen/padding_large"
                 android:layout_marginBottom="@dimen/padding_large"
-                android:gravity="center"
                 android:fontFamily="@font/google_sans_medium"
+                android:gravity="center"
                 android:paddingStart="@dimen/padding_large"
                 android:paddingEnd="@dimen/padding_large"
                 android:text="@string/confirm_dropoff"
