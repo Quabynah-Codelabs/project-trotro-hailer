@@ -50,12 +50,12 @@ class SettingsFragment : MainNavigationFragment() {
 
     override fun onResume() {
         super.onResume()
-
+        val auth: FirebaseAuth = get()
         // get live updates of current user
-        viewModel.passenger.observe(viewLifecycleOwner, Observer { passenger ->
-            binding.viewModel = viewModel
-            debugger("Observing passenger from settings page: $passenger")
-        })
+        viewModel.getUser(auth.currentUser?.uid!!, false)
+            .observe(viewLifecycleOwner, Observer {
+                binding.viewModel = viewModel
+            })
 
         // get payment method for this user
         prefs.paymentMethod.observe(viewLifecycleOwner, Observer { method ->

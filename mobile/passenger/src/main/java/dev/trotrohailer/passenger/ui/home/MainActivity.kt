@@ -144,6 +144,8 @@ class MainActivity : BaseTrackingActivity(), NavigationHost {
         private val TOP_LEVEL_DESTINATIONS = setOf(
             R.id.navigation_home,
             R.id.navigation_trips,
+            R.id.navigation_coupons,
+            R.id.navigation_promotions,
             R.id.navigation_settings,
             R.id.navigation_about
         )

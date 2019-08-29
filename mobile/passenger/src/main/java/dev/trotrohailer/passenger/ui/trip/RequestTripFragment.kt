@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import dev.trotrohailer.passenger.BuildConfig.*
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.RequestTripFragmentBinding
 import dev.trotrohailer.passenger.util.MainNavigationFragment
@@ -42,6 +46,20 @@ class RequestTripFragment : MainNavigationFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TripViewModel::class.java)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle("Cancel request")
+                setMessage("Do you wish to cancel your request for a TroTro heading towards your destination?")
+                setPositiveButton("Yes, cancel") { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                    findNavController().popBackStack()
+                }
+                setNegativeButton("Continue") { dialogInterface, _ -> dialogInterface.dismiss() }
+                setCancelable(DEBUG)
+                show()
+            }
+        }
 
         // Init map
         binding.map.onCreate(savedInstanceState)
@@ -86,10 +104,6 @@ class RequestTripFragment : MainNavigationFragment() {
                 // Get metrics for distance and duration
                 val mapApi: MapApi = get()
                 try {
-                    TransitionManager.beginDelayedTransition(binding.container)
-                    binding.bottomLayout.visible()
-                    snackbar.dismiss()
-
                     // Get distance and duration metrics
                     val mapResult = mapApi.getDistanceForDrivingAsync(
                         origin = "${pickup.latitude},${pickup.longitude}",
@@ -104,12 +118,16 @@ class RequestTripFragment : MainNavigationFragment() {
                         debugger("Duration: ${duration.text}")
 
                         uiScope.launch {
+                            TransitionManager.beginDelayedTransition(binding.container)
+                            binding.bottomLayout.visible()
+                            snackbar.dismiss()
+
                             binding.map.getMapAsync { map ->
                                 with(map) {
                                     setMapStyle(
                                         MapStyleOptions.loadRawResourceStyle(
                                             requireContext(),
-                                            R.raw.mapstyle_uberx
+                                            R.raw.map_style
                                         )
                                     )
 
@@ -119,7 +137,7 @@ class RequestTripFragment : MainNavigationFragment() {
                                             .title(getString(R.string.pickup))
                                             .position(pickup)
                                             .snippet(pickupAddress)
-                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
+                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconsource_marker))
                                     ).showInfoWindow()
 
                                     // Add dropoff location
@@ -128,11 +146,19 @@ class RequestTripFragment : MainNavigationFragment() {
                                             .title(getString(R.string.dropoff))
                                             .position(dropoff)
                                             .snippet(dropOffAddress)
-                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.iconmap_marker))
+                                            .icon(BitmapDescriptorFactory.fromResource(sharedR.drawable.icondestination_marker))
                                     ).showInfoWindow()
 
                                     // Move camera to drop off location
                                     animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 19.0f))
+
+                                    val bounds: LatLngBounds = LatLngBounds.builder()
+                                        .include(dropoff)
+                                        .include(pickup)
+                                        .include(MAP_VIEWPORT_BOUND_NE)
+                                        .include(MAP_VIEWPORT_BOUND_SW)
+                                        .build()
+                                    map.setLatLngBoundsForCameraTarget(bounds)
 
                                     addPolyline(
                                         PolylineOptions()
@@ -152,8 +178,14 @@ class RequestTripFragment : MainNavigationFragment() {
                                 tvPickupLocationText.text = pickupAddress
                                 tvDropoffLocationText.text = dropOffAddress
                                 btBookRide.setOnClickListener {
-                                    // todo: book ride
-                                    toast("Hello book ride")
+                                    findNavController().navigate(
+                                        R.id.navigation_find_driver, bundleOf(
+                                            Pair("extra_destination", dropoff),
+                                            Pair("extra_destination_address", dropOffAddress),
+                                            Pair("extra_pickup", pickup),
+                                            Pair("extra_pickup_address", pickupAddress)
+                                        )
+                                    )
                                 }
                             }
                         }
@@ -185,7 +217,11 @@ class RequestTripFragment : MainNavigationFragment() {
                     )
                         .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
                             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                findNavController().popBackStack()
+                                try {
+                                    findNavController().popBackStack()
+                                } catch (e: Exception) {
+                                    debugger(e.localizedMessage)
+                                }
                             }
                         })
                         .show()

@@ -7,10 +7,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import dev.trotrohailer.passenger.BuildConfig
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
@@ -20,6 +18,7 @@ import dev.trotrohailer.shared.data.Coordinate
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.invisible
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
+import dev.trotrohailer.shared.util.toLatLng
 import dev.trotrohailer.shared.util.visible
 import org.koin.android.ext.android.get
 
@@ -36,16 +35,20 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.map.onCreate(savedInstanceState)
         binding.map.getMapAsync(this)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.home_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,7 +62,10 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         binding.map.onResume()
-        binding.map.getMapAsync(this)
+        if (map != null) {
+            customMap.addTo(map)
+            customMap.moveToMyLocation(map)
+        }
     }
 
     override fun onPause() {
@@ -100,23 +106,44 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         debugger("Starting maps...")
         map = googleMap
-        map?.setMapStyle(
-            MapStyleOptions.loadRawResourceStyle(
-                requireContext(),
-                R.raw.mapstyle_uberx
-            )
-        )
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
+        with(map) {
+            this?.isMyLocationEnabled = true
+            this?.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.map_style
+                )
+            )
+
+            this?.setOnMyLocationButtonClickListener {
+                val location = map?.myLocation
+                this.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(location!!.toLatLng(), 18.0f),
+                    1000,
+                    null
+                )
+                true
+            }
+
+            val bounds: LatLngBounds = LatLngBounds.builder()
+                .include(customMap.lastLocation.toLatLng())
+                .include(BuildConfig.MAP_VIEWPORT_BOUND_NE)
+                .include(BuildConfig.MAP_VIEWPORT_BOUND_SW)
+                .build()
+            this?.setLatLngBoundsForCameraTarget(bounds)
+
+        }
 
         // Get view model for current user
         val viewModel: SettingsViewModel = get()
 
         // Get last location and update variables
         val lastLocation = customMap.lastLocation
-        debugger("My last location: ${lastLocation?.latitude}, ${lastLocation?.longitude}")
+        debugger("My last location: ${lastLocation?.toLatLng()}")
         if (lastLocation != null) {
-            pickupLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
+            pickupLocation = lastLocation.toLatLng()
             dropoffLocation = LatLng(lastLocation.latitude + 0.01, lastLocation.longitude + 0.02)
 
             // Get passenger and update coordinates property
@@ -133,7 +160,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(pickupLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondrive))
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
             )
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLocation, 19.0f))
             binding.confirmPickup.invisible()
@@ -149,7 +176,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             )
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 19.0f))
 
-            // todo: find driver and navigate to book ride page
             // Navigation
             findNavController().navigate(
                 R.id.navigation_request_trips, bundleOf(

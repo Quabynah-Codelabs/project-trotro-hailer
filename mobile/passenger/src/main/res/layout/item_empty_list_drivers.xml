@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/animationView"
+        android:layout_width="@dimen/lottie_anim_size"
+        android:layout_height="@dimen/lottie_anim_size"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_car_not_found" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_large"
+        android:alpha="?alphaMedium"
+        android:clickable="false"
+        android:fontFamily="@font/google_sans_medium"
+        android:gravity="center"
+        android:text="There are no drivers heading your way. Try again later"
+        android:textColor="?colorPrimary" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

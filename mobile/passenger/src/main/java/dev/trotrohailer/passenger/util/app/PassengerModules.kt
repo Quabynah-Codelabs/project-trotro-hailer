@@ -1,5 +1,7 @@
 package dev.trotrohailer.passenger.util.app
 
+import dev.trotrohailer.passenger.ui.driver.DriverViewModel
+import dev.trotrohailer.passenger.ui.driver.DriverViewModelFactory
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.ui.settings.SettingsViewModelFactory
 import dev.trotrohailer.passenger.util.prefs.PaymentPrefs
@@ -11,7 +13,9 @@ import org.koin.dsl.module
 
 val passengerModule = module {
     factory { SettingsViewModelFactory(get(named(Constants.PASSENGERS)), get()) }
+    factory { DriverViewModelFactory(get(named(Constants.DRIVERS))) }
     viewModel { SettingsViewModel(get(named(Constants.PASSENGERS)), get()) }
+    viewModel { DriverViewModel(get(named(Constants.DRIVERS))) }
 
     single { PaymentPrefs.get(androidContext()) }
 }

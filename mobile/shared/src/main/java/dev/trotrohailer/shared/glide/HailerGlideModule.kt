@@ -2,6 +2,7 @@ package dev.trotrohailer.shared.glide
 
 import android.net.Uri
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.module.AppGlideModule
@@ -27,4 +28,9 @@ fun ImageView.load(uri: Uri?, circleCrop: Boolean = true) = GlideApp.with(contex
         }
     }
     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+    .into(this)
+
+fun ImageView.load(@DrawableRes resource: Int) = GlideApp.with(context)
+    .asDrawable()
+    .load(resource)
     .into(this)

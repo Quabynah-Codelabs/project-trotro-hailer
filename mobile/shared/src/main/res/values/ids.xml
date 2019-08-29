@@ -8,6 +8,7 @@
     <item name="navigation_trips" type="id" />
     <item name="navigation_coupons" type="id" />
     <item name="navigation_promotions" type="id" />
+    <item name="navigation_find_driver" type="id" />
     <item name="navigation_request_trips" type="id" />
 
     <!--Passenger-->

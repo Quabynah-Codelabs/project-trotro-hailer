@@ -63,7 +63,22 @@
         <action
             android:id="@+id/action_navigation_request_trips_to_navigation_home"
             app:popUpTo="@id/navigation_home" />
-
+        <action
+            android:id="@+id/action_navigation_request_trips_to_navigation_find_driver"
+            app:destination="@id/navigation_find_driver">
+            <argument
+                android:name="extra_destination"
+                app:argType="com.google.android.gms.maps.model.LatLng" />
+            <argument
+                android:name="extra_destination_address"
+                app:argType="string" />
+            <argument
+                android:name="extra_pickup"
+                app:argType="com.google.android.gms.maps.model.LatLng" />
+            <argument
+                android:name="extra_pickup_address"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@id/navigation_promotions"
@@ -75,4 +90,14 @@
         android:name="dev.trotrohailer.passenger.ui.coupons.CouponsFragment"
         android:label="@string/title_coupons"
         tools:layout="@layout/coupons_fragment" />
+    <fragment
+        android:id="@id/navigation_find_driver"
+        android:name="dev.trotrohailer.passenger.ui.driver.FindDriverFragment"
+        android:label="Find Driver"
+        tools:layout="@layout/find_driver_fragment">
+        <action
+            android:id="@+id/xml"
+            app:destination="@id/nav_graph.xml"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

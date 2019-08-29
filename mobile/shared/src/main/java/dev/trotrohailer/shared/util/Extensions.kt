@@ -2,6 +2,7 @@ package dev.trotrohailer.shared.util
 
 import android.content.Intent
 import android.content.res.Resources
+import android.location.Location
 import android.os.Bundle
 import android.os.Parcel
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.core.os.ParcelCompat
 import androidx.core.os.bundleOf
 import androidx.core.text.trimmedLength
 import androidx.fragment.app.FragmentActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.trotrohailer.shared.data.Driver
@@ -77,3 +79,5 @@ object Constants {
     const val DRIVERS = "drivers"
     const val TRIPS = "trips"
 }
+
+fun Location.toLatLng(): LatLng = LatLng(latitude, longitude)
