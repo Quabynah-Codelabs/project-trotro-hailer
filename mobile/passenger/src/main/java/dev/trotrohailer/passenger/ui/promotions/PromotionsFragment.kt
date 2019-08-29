@@ -28,14 +28,6 @@ class PromotionsFragment : MainNavigationFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PromotionsViewModel::class.java)
-
-        //
-        LiveLocationUpdate(requireActivity() as BaseActivity).lastLocation.observe(
-            viewLifecycleOwner,
-            Observer { location ->
-                debugger("Current location: ${location?.toLatLng()}")
-            })
-
     }
 
 }
