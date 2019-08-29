@@ -132,7 +132,7 @@ class RequestTripFragment : MainNavigationFragment() {
                                     setMapStyle(
                                         MapStyleOptions.loadRawResourceStyle(
                                             requireContext(),
-                                            R.raw.map_style
+                                            R.raw.mapstyle_uberx
                                         )
                                     )
 
@@ -156,12 +156,12 @@ class RequestTripFragment : MainNavigationFragment() {
 
                                     // Move camera to drop off location
                                     animateCamera(
-                                        CameraUpdateFactory.newLatLngZoom(
-                                            dropoff,
-                                            21.0f
+                                        CameraUpdateFactory.newLatLngBounds(
+                                            LatLngBounds(pickup, dropoff), 100
                                         ), 550, null
                                     )
 
+                                    // Add bounds for camera target
                                     val bounds: LatLngBounds = LatLngBounds.builder()
                                         .include(dropoff)
                                         .include(pickup)
@@ -170,6 +170,7 @@ class RequestTripFragment : MainNavigationFragment() {
                                         .build()
                                     map.setLatLngBoundsForCameraTarget(bounds)
 
+                                    // Draw polyline to link locations
                                     addPolyline(
                                         PolylineOptions()
                                             .addAll(mutableListOf(pickup, dropoff))

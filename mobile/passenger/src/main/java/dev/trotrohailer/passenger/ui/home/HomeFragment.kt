@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import dev.trotrohailer.passenger.BuildConfig
 import dev.trotrohailer.passenger.R
@@ -43,7 +44,9 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.map.onCreate(savedInstanceState)
-        binding.map.getMapAsync(this)
+        //binding.map.getMapAsync(this)
+        val fragment = childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment
+        fragment?.getMapAsync(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,6 +108,10 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
+        map?.setOnMapClickListener { latLng ->
+            debugger("Location is: $latLng")
+        }
+        map?.isTrafficEnabled = true
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
         with(map) {
@@ -124,7 +131,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             this?.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     requireContext(),
-                    R.raw.map_style
+                    R.raw.mapstyle_uberx
                 )
             )
 
