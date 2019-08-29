@@ -14,8 +14,22 @@
         <item
             android:id="@id/navigation_trips"
             android:contentDescription="@string/title_trips"
-            android:icon="@drawable/ic_nav_signpost"
+            android:icon="@drawable/twotone_explore_24px"
             android:title="@string/title_trips" />
+
+
+        <item
+            android:id="@id/navigation_coupons"
+            android:contentDescription="@string/title_trips"
+            android:icon="@drawable/twotone_receipt_24px"
+            android:title="@string/title_coupons" />
+
+
+        <item
+            android:id="@id/navigation_promotions"
+            android:contentDescription="@string/title_trips"
+            android:icon="@drawable/ic_nav_signpost"
+            android:title="@string/title_promotions" />
 
         <item
             android:id="@id/navigation_settings"

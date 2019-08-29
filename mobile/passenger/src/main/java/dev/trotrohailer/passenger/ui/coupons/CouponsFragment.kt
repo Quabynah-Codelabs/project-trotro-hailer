@@ -1,19 +1,14 @@
 package dev.trotrohailer.passenger.ui.coupons
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-
 import dev.trotrohailer.passenger.R
+import dev.trotrohailer.passenger.util.MainNavigationFragment
 
-class CouponsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = CouponsFragment()
-    }
+class CouponsFragment : MainNavigationFragment() {
 
     private lateinit var viewModel: CouponsViewModel
 
@@ -27,7 +22,6 @@ class CouponsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CouponsViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

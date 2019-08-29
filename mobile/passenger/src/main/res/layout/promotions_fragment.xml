@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:airbnb="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="dev.trotrohailer.passenger.ui.promotions.PromotionsViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.promotions.PromotionsFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            style="@style/Widget.IOSched.AppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:liftOnScroll="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:navigationContentDescription="@string/default_app_name_passenger"
+                app:navigationIcon="@drawable/ic_menu"
+                app:title="@string/title_promotions" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+           <com.airbnb.lottie.LottieAnimationView
+               android:id="@+id/animationView"
+               android:layout_width="match_parent"
+               android:layout_height="256dp"
+               android:layout_gravity="center"
+               airbnb:layout_constraintBottom_toBottomOf="parent"
+               airbnb:layout_constraintTop_toTopOf="parent"
+               airbnb:lottie_autoPlay="true"
+               airbnb:lottie_loop="true"
+               airbnb:lottie_fileName="no_promotions.json" />
+
+           <com.google.android.material.button.MaterialButton
+               style="@style/Widget.MaterialComponents.Button.TextButton"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_margin="@dimen/spacing_micro"
+               android:alpha="?alphaMedium"
+               android:clickable="false"
+               android:gravity="center"
+               android:text="There are no promotions available"
+               android:fontFamily="@font/google_sans_medium"
+               android:textColor="?colorPrimary"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/animationView" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
