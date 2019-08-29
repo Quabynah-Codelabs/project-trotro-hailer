@@ -104,12 +104,23 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     private var dropoffLocation: LatLng = BuildConfig.MAP_VIEWPORT_BOUND_NE
 
     override fun onMapReady(googleMap: GoogleMap?) {
-        debugger("Starting maps...")
         map = googleMap
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
         with(map) {
             this?.isMyLocationEnabled = true
+            
+            map?.uiSettings.apply {
+                this?.isCompassEnabled = true
+                this?.isMapToolbarEnabled = true
+                this?.isMyLocationButtonEnabled = true
+                this?.isRotateGesturesEnabled = true
+                this?.isScrollGesturesEnabled = true
+                this?.isTiltGesturesEnabled = true
+                this?.isZoomControlsEnabled = true
+                this?.isZoomGesturesEnabled = true
+            }
+
             this?.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     requireContext(),
@@ -120,8 +131,11 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             this?.setOnMyLocationButtonClickListener {
                 val location = map?.myLocation
                 this.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(location!!.toLatLng(), 18.0f),
-                    1000,
+                    CameraUpdateFactory.newLatLngZoom(
+                        location!!.toLatLng(),
+                        BuildConfig.MAP_CAMERA_FOCUS_ZOOM
+                    ),
+                    850,
                     null
                 )
                 true
@@ -144,7 +158,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         debugger("My last location: ${lastLocation?.toLatLng()}")
         if (lastLocation != null) {
             pickupLocation = lastLocation.toLatLng()
-            dropoffLocation = LatLng(lastLocation.latitude + 0.01, lastLocation.longitude + 0.02)
+            dropoffLocation = LatLng(lastLocation.latitude + 0.11, lastLocation.longitude + 0.21)
 
             // Get passenger and update coordinates property
             val passenger = viewModel.passenger.value.apply {
@@ -160,9 +174,14 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(pickupLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconmap_marker))
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconsource_marker))
             )
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLocation, 19.0f))
+            googleMap?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    pickupLocation,
+                    BuildConfig.MAP_CAMERA_FOCUS_ZOOM
+                )
+            )
             binding.confirmPickup.invisible()
             binding.confirmDropOff.visible()
         }
@@ -172,9 +191,14 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(dropoffLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconsource_marker))
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondestination_marker))
             )
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoffLocation, 19.0f))
+            googleMap?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    dropoffLocation,
+                    BuildConfig.MAP_CAMERA_FOCUS_ZOOM
+                )
+            )
 
             // Navigation
             findNavController().navigate(

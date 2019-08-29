@@ -15,5 +15,5 @@
     <item name="navigation_profile" type="id" />
 
     <!--Driver-->
-    <item name="navigation_" type="id" />
+    <item name="navigation_earning" type="id" />
 </resources>

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="default_app_name">TroTro© for Driver</string>
+    <string name="default_app_name">TroTro© for Drivers</string>
     <string name="default_app_name_passenger">TroTro© for Passengers</string>
     <string name="app_name" tools:override="true">shared</string>
     <string name="welcome">Welcome to</string>
@@ -43,6 +43,7 @@
     <string name="title_promotions">Promotions</string>
     <string name="search">Search</string>
     <string name="title_find_driver">Find Driver</string>
+    <string name="title_earnings">Earnings</string>
 
     <!--    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAOtv5oXGXcgOQhQYFC7j4TFmIaLmZb_s0</string>-->
 </resources>

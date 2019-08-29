@@ -11,11 +11,11 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:fitsSystemWindows="true"
-        android:id="@+id/container"
         tools:context=".ui.trip.RequestTripFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -54,9 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@color/white"
-                android:elevation="6dp"
-                android:visibility="gone"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
@@ -205,14 +204,14 @@
                     android:layout_marginEnd="@dimen/button_marginRight"
                     android:layout_marginBottom="15dip"
                     android:background="@drawable/button_cornered"
+                    android:clickable="true"
                     android:drawableEnd="@drawable/iconright_arrow"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="24dp"
                     android:paddingRight="24dp"
                     android:text="@string/book_ride"
                     android:textAllCaps="true"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/normalText_sp_14"
                     android:textStyle="bold" />

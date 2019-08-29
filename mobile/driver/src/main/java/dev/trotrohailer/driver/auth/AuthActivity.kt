@@ -1,4 +1,4 @@
-package dev.trotrohailer.passenger.ui.auth
+package dev.trotrohailer.driver.auth
 
 import android.app.Activity
 import android.content.Intent
@@ -10,21 +10,20 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import dev.trotrohailer.passenger.R
-import dev.trotrohailer.passenger.ui.home.MainActivity
-import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
-import dev.trotrohailer.shared.BuildConfig.DEBUG
+import dev.trotrohailer.driver.main.HomeActivity
+import dev.trotrohailer.driver.R
+import dev.trotrohailer.driver.viewmodel.DriverViewModel
+import dev.trotrohailer.shared.BuildConfig
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.databinding.ActivityAuthBinding
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.intentTo
-import dev.trotrohailer.shared.util.mapToPassenger
+import dev.trotrohailer.shared.util.mapToDriver
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
-import dev.trotrohailer.shared.R as sharedR
 
 class AuthActivity : BaseActivity() {
-    private val viewModel by inject<SettingsViewModel>()
+    private val viewModel by inject<DriverViewModel>()
     private lateinit var binding: ActivityAuthBinding
 
     private val snackbar by lazy {
@@ -35,22 +34,12 @@ class AuthActivity : BaseActivity() {
         )
     }
 
-    // Sign in options for Google Auth
-    /*private val gso by lazy {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken(getString(appR.string.default_web_client_id))
-            .build()
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, sharedR.layout.activity_auth)
+        setContentView(R.layout.activity_auth)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
 
-        binding.pageTitle.text = getString(R.string.default_app_name_passenger)
-        binding.btLogin.setOnClickListener {
-            startLogin()
-        }
+        binding.btLogin.setOnClickListener { startLogin() }
     }
 
     // Start Google Login
@@ -61,11 +50,11 @@ class AuthActivity : BaseActivity() {
                 mutableListOf(
                     AuthUI.IdpConfig.PhoneBuilder()
                         // todo: change default device number
-                        .setDefaultNumber("gh", "554024702")
+                        .setDefaultNumber("gh", "554022344")
                         .build()
                 )
             )
-            .setIsSmartLockEnabled(DEBUG, true)
+            .setIsSmartLockEnabled(BuildConfig.DEBUG, true)
             .setTosAndPrivacyPolicyUrls(
                 "https://superapp.example.com/terms-of-service.html",
                 "https://superapp.example.com/privacy-policy.html"
@@ -129,37 +118,13 @@ class AuthActivity : BaseActivity() {
         }
     }
 
-    /*private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        debugger("Logging in with email: ${acct.email}")
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-
-        // Get auth instance
-        val auth: FirebaseAuth = get()
-
-        // Sign in user
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    debugger("signInWithCredential:success")
-                    val user = auth.currentUser
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    debugger("signInWithCredential:failure")
-                    snackbar.show()
-                    updateUI(null)
-                }
-            }
-    }*/
-
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if (firebaseUser == null) {
             debugger("Firebase user could not be created")
         } else {
             snackbar.setText("Saving user information").show()
-            viewModel.saveUser(firebaseUser.mapToPassenger())
-            intentTo(MainActivity::class.java, true)
+            viewModel.saveUser(firebaseUser.mapToDriver())
+            intentTo(HomeActivity::class.java, true)
         }
     }
 

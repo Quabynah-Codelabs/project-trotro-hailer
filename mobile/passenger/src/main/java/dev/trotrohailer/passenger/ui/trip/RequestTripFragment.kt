@@ -86,18 +86,21 @@ class RequestTripFragment : MainNavigationFragment() {
 
                 try {
                     // Get pickup address
-                    val pickupAddress: String = geocoder.getFromLocation(
+                    val address = geocoder.getFromLocation(
                         pickup.latitude,
                         pickup.longitude,
-                        2
-                    )[0].getAddressLine(0)
+                        1
+                    )[0]
+                    debugger("Fare: ${address.thoroughfare}")
+                    val pickupAddress: String = address.thoroughfare
+
 
                     // Get drop off address
                     val dropOffAddress: String = geocoder.getFromLocation(
                         dropoff.latitude,
                         dropoff.longitude,
-                        2
-                    )[0].getAddressLine(0)
+                        1
+                    )[0].thoroughfare
 
                     // todo: debugging
                     debugger("Pickup address: $pickupAddress")
@@ -152,7 +155,12 @@ class RequestTripFragment : MainNavigationFragment() {
                                     ).showInfoWindow()
 
                                     // Move camera to drop off location
-                                    animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 19.0f))
+                                    animateCamera(
+                                        CameraUpdateFactory.newLatLngZoom(
+                                            dropoff,
+                                            21.0f
+                                        ), 550, null
+                                    )
 
                                     val bounds: LatLngBounds = LatLngBounds.builder()
                                         .include(dropoff)
@@ -168,6 +176,20 @@ class RequestTripFragment : MainNavigationFragment() {
                                             .color(R.color.warm_blue).startCap(ButtCap())
                                             .endCap(SquareCap())
                                     )
+
+                                    uiSettings.apply {
+                                        isCompassEnabled = true
+                                        isMapToolbarEnabled = true
+                                        isMyLocationButtonEnabled = true
+                                        isRotateGesturesEnabled = true
+                                        isScrollGesturesEnabled = true
+                                        isTiltGesturesEnabled = true
+                                        isZoomControlsEnabled = true
+                                        isZoomGesturesEnabled = true
+                                        isBuildingsEnabled = false
+                                        isTrafficEnabled = true
+                                        isMyLocationEnabled = true
+                                    }
                                 }
                             }
 
