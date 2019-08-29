@@ -12,6 +12,7 @@ import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.shared.base.BaseActivity
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.location.live.LiveLocationUpdate
+import dev.trotrohailer.shared.util.toLatLng
 
 class PromotionsFragment : MainNavigationFragment() {
 
@@ -32,7 +33,7 @@ class PromotionsFragment : MainNavigationFragment() {
         LiveLocationUpdate(requireActivity() as BaseActivity).lastLocation.observe(
             viewLifecycleOwner,
             Observer { location ->
-                debugger("Current location: $location")
+                debugger("Current location: ${location?.toLatLng()}")
             })
 
     }

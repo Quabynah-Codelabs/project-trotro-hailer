@@ -70,6 +70,9 @@ dependencies {
     def lottieVersion = "3.0.7"
     api "com.airbnb.android:lottie:$lottieVersion"
 
+    // GeoFirestore
+    api 'com.github.imperiumlabs:GeoFirestore-Android:v1.5.0'
+
     // HyperTrack
     api("com.hypertrack:hypertrack:3.4.3@aar") {transitive = true}
     api 'com.hypertrack:hypertrack-views:0.2.0'

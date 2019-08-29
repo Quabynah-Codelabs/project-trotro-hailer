@@ -16,14 +16,6 @@ class LiveLocationUpdate(private val host: AppCompatActivity) : LifecycleOwner, 
     GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
     override fun onConnected(p0: Bundle?) {
         debugger("API client connected")
-
-        val locationRequest = LocationRequest()
-        with(locationRequest) {
-            fastestInterval = 1000
-            interval = 1000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-        buildApiClient()
     }
 
     override fun onConnectionSuspended(p0: Int) {
@@ -42,6 +34,21 @@ class LiveLocationUpdate(private val host: AppCompatActivity) : LifecycleOwner, 
     override fun onLocationChanged(location: Location?) {
         if (location != null) {
             _liveLocation.value = location
+        }
+    }
+
+    init {
+        val locationRequest = LocationRequest()
+        with(locationRequest) {
+            fastestInterval = 1000
+            interval = 1000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        buildApiClient()
+        LocationServices.getFusedLocationProviderClient(host).lastLocation.addOnCompleteListener(host){
+            if (it.isSuccessful){
+                _liveLocation.value = it.result
+            }
         }
     }
 

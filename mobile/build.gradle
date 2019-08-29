@@ -9,6 +9,7 @@ buildscript {
             name 'hypertrack'
             url 'http://m2.hypertrack.com'
         }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
@@ -27,6 +28,7 @@ allprojects {
             name 'hypertrack'
             url 'http://m2.hypertrack.com'
         }
+        maven { url 'https://jitpack.io' }
     }
 }
 

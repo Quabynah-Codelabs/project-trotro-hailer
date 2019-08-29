@@ -4,6 +4,7 @@
       <w>datasource</w>
       <w>dropoff</w>
       <w>firebase</w>
+      <w>firestore</w>
       <w>hailer</w>
       <w>snackbar</w>
       <w>trotro</w>
