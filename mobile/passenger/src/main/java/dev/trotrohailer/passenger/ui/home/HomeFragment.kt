@@ -11,7 +11,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import dev.trotrohailer.passenger.BuildConfig
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
@@ -108,6 +111,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     // Locations
     private var pickupLocation: LatLng = BuildConfig.MAP_VIEWPORT_BOUND_SW
     private var dropoffLocation: LatLng = BuildConfig.MAP_VIEWPORT_BOUND_NE
+    private var marker: MarkerOptions? = null
 
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
@@ -127,20 +131,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     }
 
     private fun setupMap() {
-        map?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragEnd(p0: Marker?) {
-
-            }
-
-            override fun onMarkerDragStart(p0: Marker?) {
-
-            }
-
-            override fun onMarkerDrag(p0: Marker?) {
-
-            }
-        })
-
         map?.isTrafficEnabled = true
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
@@ -184,7 +174,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         val lastLocation = customMap.lastLocation
         if (lastLocation != null) {
             pickupLocation = lastLocation.toLatLng()
-            dropoffLocation = LatLng(lastLocation.latitude + 0.11, lastLocation.longitude + 0.21)
+            dropoffLocation = LatLng(lastLocation.latitude + 0.0001, lastLocation.longitude)
 
             // Get passenger and update coordinates property
             val passenger = viewModel.passenger.value.apply {
@@ -198,29 +188,40 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         binding.confirmPickup.setOnClickListener {
             binding.confirmPickup.invisible()
             binding.confirmDropOff.visible()
+
+            if (marker == null) {
+                marker = MarkerOptions()
+                    .position(dropoffLocation)
+                    .draggable(true)
+                    .alpha(1.0f)
+                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondestination_marker))
+            }
+
+            map?.addMarker(marker)
+            map?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    marker?.position,
+                    16.0f
+                )
+            )
+        }
+
+        map?.setOnMapClickListener { latLng ->
+            map?.clear()
+            marker?.position(latLng)
+            dropoffLocation = latLng
+            if (marker != null) map?.addMarker(marker)
         }
 
         // Show drop-off button and allow selection of pickup position
         binding.confirmDropOff.setOnClickListener {
-            map?.addMarker(
-                MarkerOptions()
-                    .position(dropoffLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondestination_marker))
-            )
-            map?.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    dropoffLocation,
-                    BuildConfig.MAP_CAMERA_FOCUS_ZOOM
-                )
-            )
-
             // Hide dropoff button
             binding.confirmDropOff.gone()
 
             // Confirm pickup location
             binding.confirmPickup.apply {
                 visible()
-                text = "Start trip to dropoff"
+                text = "Find a driver for this trip"
                 setOnClickListener {
                     // Navigation
                     findNavController().navigate(
