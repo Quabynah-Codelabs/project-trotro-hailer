@@ -1,7 +1,10 @@
 package dev.trotrohailer.passenger.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -16,7 +19,7 @@ import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.data.Coordinate
-import dev.trotrohailer.shared.util.debugger
+import dev.trotrohailer.shared.util.gone
 import dev.trotrohailer.shared.util.invisible
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 import dev.trotrohailer.shared.util.toLatLng
@@ -108,15 +111,42 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
-        map?.setOnMapClickListener { latLng ->
-            debugger("Location is: $latLng")
-        }
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            setupMap()
+        else
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), RC_PERMS
+            )
+    }
+
+    private fun setupMap() {
+        map?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+            override fun onMarkerDragEnd(p0: Marker?) {
+
+            }
+
+            override fun onMarkerDragStart(p0: Marker?) {
+
+            }
+
+            override fun onMarkerDrag(p0: Marker?) {
+
+            }
+        })
+
         map?.isTrafficEnabled = true
         customMap.addTo(map)
         customMap.moveToMyLocation(map)
         with(map) {
             this?.isMyLocationEnabled = true
-            
+
             map?.uiSettings.apply {
                 this?.isCompassEnabled = true
                 this?.isMapToolbarEnabled = true
@@ -124,8 +154,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 this?.isRotateGesturesEnabled = true
                 this?.isScrollGesturesEnabled = true
                 this?.isTiltGesturesEnabled = true
-                this?.isZoomControlsEnabled = true
-                this?.isZoomGesturesEnabled = true
             }
 
             this?.setMapStyle(
@@ -139,22 +167,14 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 val location = map?.myLocation
                 this.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
-                        location!!.toLatLng(),
-                        BuildConfig.MAP_CAMERA_FOCUS_ZOOM
+                        location?.toLatLng(),
+                        15.0f
                     ),
                     850,
                     null
                 )
                 true
             }
-
-            val bounds: LatLngBounds = LatLngBounds.builder()
-                .include(customMap.lastLocation.toLatLng())
-                .include(BuildConfig.MAP_VIEWPORT_BOUND_NE)
-                .include(BuildConfig.MAP_VIEWPORT_BOUND_SW)
-                .build()
-            this?.setLatLngBoundsForCameraTarget(bounds)
-
         }
 
         // Get view model for current user
@@ -162,7 +182,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
 
         // Get last location and update variables
         val lastLocation = customMap.lastLocation
-        debugger("My last location: ${lastLocation?.toLatLng()}")
         if (lastLocation != null) {
             pickupLocation = lastLocation.toLatLng()
             dropoffLocation = LatLng(lastLocation.latitude + 0.11, lastLocation.longitude + 0.21)
@@ -177,44 +196,56 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         // Show pickup button and allow selection of pickup position
         binding.confirmPickup.visible()
         binding.confirmPickup.setOnClickListener {
-            googleMap?.clear()
-            googleMap?.addMarker(
-                MarkerOptions()
-                    .position(pickupLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.iconsource_marker))
-            )
-            googleMap?.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    pickupLocation,
-                    BuildConfig.MAP_CAMERA_FOCUS_ZOOM
-                )
-            )
             binding.confirmPickup.invisible()
             binding.confirmDropOff.visible()
         }
 
         // Show drop-off button and allow selection of pickup position
         binding.confirmDropOff.setOnClickListener {
-            googleMap?.addMarker(
+            map?.addMarker(
                 MarkerOptions()
                     .position(dropoffLocation)
                     .icon(BitmapDescriptorFactory.fromResource(dev.trotrohailer.shared.R.drawable.icondestination_marker))
             )
-            googleMap?.animateCamera(
+            map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     dropoffLocation,
                     BuildConfig.MAP_CAMERA_FOCUS_ZOOM
                 )
             )
 
-            // Navigation
-            findNavController().navigate(
-                R.id.navigation_request_trips, bundleOf(
-                    Pair("extra_pickup", pickupLocation),
-                    Pair("extra_dropoff", dropoffLocation)
-                )
-            )
+            // Hide dropoff button
+            binding.confirmDropOff.gone()
+
+            // Confirm pickup location
+            binding.confirmPickup.apply {
+                visible()
+                text = "Start trip to dropoff"
+                setOnClickListener {
+                    // Navigation
+                    findNavController().navigate(
+                        R.id.navigation_request_trips, bundleOf(
+                            Pair("extra_pickup", pickupLocation),
+                            Pair("extra_dropoff", dropoffLocation)
+                        )
+                    )
+                }
+            }
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            setupMap()
+    }
+
+    companion object {
+        private const val RC_PERMS = 88
     }
 
 }

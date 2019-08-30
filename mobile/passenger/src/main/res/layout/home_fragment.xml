@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:paddingStart="@dimen/padding_large"
                 android:paddingEnd="@dimen/padding_large"
-                android:text="@string/confirm_pickup"
+                android:text="@string/title_request_trip"
                 android:visibility="invisible" />
 
             <com.google.android.material.button.MaterialButton
