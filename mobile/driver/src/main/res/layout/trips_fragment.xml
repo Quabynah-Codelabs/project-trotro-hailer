@@ -12,23 +12,61 @@
         android:fitsSystemWindows="true"
         tools:context=".trips.TripsFragment">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            style="@style/Widget.IOSched.AppBar"
+        <dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:liftOnScroll="true">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:navigationContentDescription="@string/default_app_name"
-                app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/title_trips" />
+                android:layout_height="match_parent">
 
-        </com.google.android.material.appbar.AppBarLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_trips"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/spacing_normal"
+                    android:paddingBottom="@dimen/schedule_page_padding_bottom"
+                    android:scrollbars="vertical"
+                    app:layoutManager="LinearLayoutManager" />
+
+                <!--TODO: Show all recent trips for the current passenger in recyclerview-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/trips_empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animationView"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="bus.json"
+                        app:lottie_loop="true" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_large"
+                        android:alpha="?alphaMedium"
+                        android:clickable="false"
+                        android:fontFamily="@font/google_sans_medium"
+                        android:gravity="center"
+                        android:text="Your recent trips will appear here"
+                        android:textColor="?colorPrimary"
+                        app:layout_constraintTop_toBottomOf="@id/animationView" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout>
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

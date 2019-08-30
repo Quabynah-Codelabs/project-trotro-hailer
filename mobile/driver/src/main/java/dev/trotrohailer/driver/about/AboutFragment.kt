@@ -1,28 +1,25 @@
-package dev.trotrohailer.driver.trips
+package dev.trotrohailer.driver.about
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
-import dev.trotrohailer.driver.R
+import dev.trotrohailer.driver.databinding.AboutFragmentBinding
 import dev.trotrohailer.driver.util.MainNavigationFragment
 
-class TripsFragment : MainNavigationFragment() {
-
-    private lateinit var viewModel: TripsViewModel
+class AboutFragment : MainNavigationFragment() {
+    private lateinit var binding: AboutFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.trips_fragment, container, false)
+        binding = AboutFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(TripsViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

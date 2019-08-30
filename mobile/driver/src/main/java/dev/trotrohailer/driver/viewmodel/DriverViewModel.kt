@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.*
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
+import dev.trotrohailer.driver.R
 import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.datasource.DriverRepository
 import dev.trotrohailer.shared.result.Response
@@ -90,5 +91,19 @@ class DriverViewModel(private val repository: DriverRepository, private val auth
     }
 
     fun logout(view: View) = repository.logoutUser(view.context)
+
+    fun updateInfo(v: View?) {
+        when (v?.id) {
+            R.id.update_vehicle_name -> {
+
+            }
+
+            R.id.update_vehicle_number -> {
+
+            }
+
+            else -> debugger("Do nothing. No ID selected")
+        }
+    }
 
 }

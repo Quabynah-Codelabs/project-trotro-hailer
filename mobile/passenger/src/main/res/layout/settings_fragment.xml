@@ -20,8 +20,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:background="@color/white"
+        android:fitsSystemWindows="true"
         tools:context=".ui.settings.SettingsFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -129,25 +129,48 @@
 
                         <TextView
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="@dimen/padding_normal"
+                            android:layout_marginTop="@dimen/padding_normal"
+                            android:fontFamily="@font/google_sans_medium"
+                            android:text="Wallet Balance"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_normal"
+                            android:layout_marginTop="@dimen/spacing_micro"
+                            android:alpha="?alphaMedium"
+                            android:clickable="false"
+                            android:gravity="center"
+                            android:text="GHC 120"
+                            android:textColor="?colorPrimary" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="?actionBarSize"
+                            android:layout_marginStart="@dimen/padding_normal"
                             android:layout_marginTop="@dimen/spacing_normal"
                             android:drawablePadding="@dimen/padding_normal"
                             android:fontFamily="@font/google_sans"
                             android:gravity="center_vertical"
-                            android:layout_marginStart="@dimen/padding_normal"
                             android:text="@{prefs.paymentMethod}"
                             android:textAppearance="?textAppearanceBody2"
                             android:visibility="@{prefs.paymentMethod == null ? View.GONE : View.VISIBLE, default=`visible`}"
                             tools:text="@tools:sample/lorem" />
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/logout"
                             android:layout_width="@dimen/lottie_anim_size"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/padding_xlarge"
                             android:gravity="center"
-                            android:id="@+id/logout"
-                            android:text="Sign out"/>
+                            android:text="Sign out" />
 
 
                     </androidx.appcompat.widget.LinearLayoutCompat>

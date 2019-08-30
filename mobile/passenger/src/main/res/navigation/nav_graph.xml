@@ -42,7 +42,7 @@
         tools:layout="@layout/trip_fragment" />
     <fragment
         android:id="@id/navigation_about"
-        android:name="dev.trotrohailer.passenger.ui.about.AboutFragment"
+        android:name="dev.trotrohailer.driver.about.AboutFragment"
         android:label="@string/title_about"
         tools:layout="@layout/about_fragment" />
     <fragment

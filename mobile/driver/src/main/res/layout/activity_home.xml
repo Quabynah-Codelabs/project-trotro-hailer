@@ -17,27 +17,37 @@
             android:layout_height="match_parent"
             tools:openDrawer="start">
 
-            <FrameLayout
-                android:id="@+id/content_container"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                android:fitsSystemWindows="true">
 
-               <!-- <fragment
-                    android:id="@+id/driver_nav_fragment"
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appbar"
+                    style="@style/Widget.IOSched.AppBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    app:liftOnScroll="true">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?actionBarSize"
+                        app:navigationContentDescription="@string/default_app_name"
+                        app:navigationIcon="@drawable/ic_menu"
+                        app:title="@string/title_home" />
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <FrameLayout
+                    android:id="@+id/content_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/driver_nav_graph" />-->
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-                <View
-                    android:id="@+id/status_bar_scrim"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@color/status_bar_scrim" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-            </FrameLayout>
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_view"

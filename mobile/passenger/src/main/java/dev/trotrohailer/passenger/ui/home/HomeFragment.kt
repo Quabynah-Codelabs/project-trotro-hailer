@@ -112,6 +112,48 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         super.onStart()
         binding.map.onStart()
 
+        // Auth and firestore instances
+        val db: FirebaseFirestore = get()
+        val auth: FirebaseAuth = get()
+
+        // Get last trip and navigate to find driver screen
+        with(GeoFirestore(db.passengerRequests())) {
+            getLocation(auth.currentUser?.uid!!, object : GeoFirestore.LocationCallback {
+                override fun onComplete(location: GeoPoint?, exception: Exception?) {
+                    if (location != null) {
+                        debugger("Has pending requests")
+
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            setTitle("Continue previous request")
+                            setMessage("You have an uncancelled request for a TroTro. Do you wish to continue searching or start over?")
+                            setPositiveButton("Start over") { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                removeLocation(auth.currentUser?.uid!!)
+                            }
+                            setNegativeButton("Continue") { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                findNavController().navigate(
+                                    R.id.navigation_find_driver, bundleOf(
+                                        Pair(
+                                            "extra_destination",
+                                            LatLng(location.latitude, location.longitude)
+                                        ),
+                                        Pair("extra_destination_address", ""),
+                                        Pair(
+                                            "extra_pickup",
+                                            LatLng(location.latitude, location.longitude)
+                                        ),
+                                        Pair("extra_pickup_address", "")
+                                    )
+                                )
+                            }
+                            show()
+                        }
+                    }
+                }
+            })
+        }
+
         if (shouldShowMapHelper) {
             ioScope.launch {
                 delay(1550)
@@ -268,46 +310,6 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                 }
             }
         }
-
-        val db: FirebaseFirestore = get()
-        val auth: FirebaseAuth = get()
-        // Get last trip and navigate to find driver screen
-        with(GeoFirestore(db.passengerRequests())) {
-            getLocation(auth.currentUser?.uid!!, object : GeoFirestore.LocationCallback {
-                override fun onComplete(location: GeoPoint?, exception: Exception?) {
-                    if (location != null) {
-                        debugger("Has pending requests")
-
-                        MaterialAlertDialogBuilder(requireContext()).apply {
-                            setTitle("Continue previous request")
-                            setMessage("You have an uncancelled request for a TroTro. Do you wish to continue searching or start afresh?")
-                            setPositiveButton("Start over") { dialogInterface, _ ->
-                                dialogInterface.dismiss()
-                                removeLocation(auth.currentUser?.uid!!)
-                            }
-                            setNegativeButton("Continue") { dialogInterface, _ ->
-                                dialogInterface.dismiss()
-                                findNavController().navigate(
-                                    R.id.navigation_find_driver, bundleOf(
-                                        Pair(
-                                            "extra_destination",
-                                            LatLng(location.latitude, location.longitude)
-                                        ),
-                                        Pair("extra_destination_address", ""),
-                                        Pair(
-                                            "extra_pickup",
-                                            LatLng(location.latitude, location.longitude)
-                                        ),
-                                        Pair("extra_pickup_address", "")
-                                    )
-                                )
-                            }
-                            show()
-                        }
-                    }
-                }
-            })
-        }
     }
 
     override fun onRequestPermissionsResult(
@@ -316,7 +318,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == RC_PERMS && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             setupMap()
     }
 

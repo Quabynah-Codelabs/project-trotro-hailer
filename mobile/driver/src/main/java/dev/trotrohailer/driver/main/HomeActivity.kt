@@ -1,29 +1,36 @@
 package dev.trotrohailer.driver.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.lifecycle.Observer
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import dev.trotrohailer.driver.R
+import dev.trotrohailer.driver.about.AboutFragment
 import dev.trotrohailer.driver.databinding.ActivityHomeBinding
-import dev.trotrohailer.driver.util.MainNavigationFragment
+import dev.trotrohailer.driver.earnings.EarningsFragment
+import dev.trotrohailer.driver.profile.ProfileFragment
+import dev.trotrohailer.driver.trips.TripsFragment
 import dev.trotrohailer.driver.util.NavigationHost
-import dev.trotrohailer.shared.base.BaseTrackingActivity
+import dev.trotrohailer.driver.viewmodel.DriverViewModel
+import dev.trotrohailer.shared.base.BaseActivity
+import dev.trotrohailer.shared.glide.load
 import dev.trotrohailer.shared.util.shouldCloseDrawerFromBackPress
-import dev.trotrohailer.shared.widget.HeightTopWindowInsetsListener
 import dev.trotrohailer.shared.widget.NoopWindowInsetsListener
+import org.koin.android.ext.android.get
 
-class HomeActivity : BaseTrackingActivity(), NavigationHost {
+class HomeActivity : BaseActivity(), NavigationHost,
+    NavigationView.OnNavigationItemSelectedListener {
+
     private lateinit var binding: ActivityHomeBinding
-//    private lateinit var navController: NavController
-//    private var navHostFragment: NavHostFragment? = null
     private var currentNavId = NAV_ID_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,42 +46,38 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         // Make the content ViewGroup ignore insets so that it does not use the default padding
         binding.contentContainer.setOnApplyWindowInsetsListener(NoopWindowInsetsListener)
-        binding.statusBarScrim.setOnApplyWindowInsetsListener(HeightTopWindowInsetsListener)
+        supportFragmentManager.beginTransaction().replace(R.id.content_container, HomeFragment())
+            .commit()
 
-        /*navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.driver_nav_host_fragment) as NavHostFragment?
-        navController = findNavController(R.id.driver_nav_host_fragment)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            currentNavId = destination.id
-            val isTopLevelDestination = TOP_LEVEL_DESTINATIONS.contains(destination.id)
-            val lockMode = if (isTopLevelDestination) {
-                DrawerLayout.LOCK_MODE_UNLOCKED
-            } else {
-                DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            }
-            binding.drawer.setDrawerLockMode(lockMode)
+        // Toggle handler
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawer,
+            binding.toolbar,
+            R.string.open_drawer,
+            R.string.close_drawer
+        )
+        binding.drawer.addDrawerListener(toggle)
+        toggle.syncState()
+        binding.navView.setNavigationItemSelectedListener(this)
+        binding.navView.setCheckedItem(binding.navView.menu.findItem(R.id.navigation_home))
+
+        with(binding.navView.getHeaderView(0)) {
+            val viewModel: DriverViewModel = get()
+
+            viewModel.driver.observe(this@HomeActivity, Observer { driver ->
+                this.findViewById<ImageView>(R.id.user_avatar).apply {
+                    tag = null
+                    load(driver.avatar?.toUri(), true)
+                }
+                this.findViewById<TextView>(R.id.user_name).text = driver.name
+            })
         }
-        binding.navView.setupWithNavController(navController)
-        if (savedInstanceState == null) {
-            // default to showing Home
-            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.navigation_home)
-            binding.navView.setCheckedItem(initialNavId) // doesn't trigger listener
-            navigateTo(initialNavId)
-        }*/
-    }
-
-    override fun locationServicesEnabled() {
-        // todo:
     }
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {
         val appBarConfiguration = AppBarConfiguration(TOP_LEVEL_DESTINATIONS, binding.drawer)
         //toolbar.setupWithNavController(navController, appBarConfiguration)
-    }
-
-    override fun onUserInteraction() {
-        super.onUserInteraction()
-        //getCurrentFragment()?.onUserInteraction()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -95,22 +98,7 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
         }
     }
 
-    private fun closeDrawer() {
-        binding.drawer.closeDrawer(GravityCompat.START)
-    }
-
-   /* private fun getCurrentFragment(): MainNavigationFragment? {
-        return navHostFragment
-            ?.childFragmentManager
-            ?.primaryNavigationFragment as? MainNavigationFragment
-    }
-
-    private fun navigateTo(navId: Int) {
-        if (navId == currentNavId) {
-            return // user tapped the current item
-        }
-        navController.navigate(navId)
-    }*/
+    private fun closeDrawer() = binding.drawer.closeDrawer(GravityCompat.START)
 
     companion object {
         /** Key for an int extra defining the initial navigation target. */
@@ -123,6 +111,43 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
             R.id.navigation_settings,
             R.id.navigation_about
         )
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.navigation_home -> {
+                binding.toolbar.title = item.title
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_container, HomeFragment())
+                    .commit()
+            }
+            R.id.navigation_trips -> {
+                binding.toolbar.title = item.title
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_container, TripsFragment())
+                    .commit()
+            }
+            R.id.navigation_earning -> {
+                binding.toolbar.title = item.title
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_container, EarningsFragment())
+                    .commit()
+            }
+            R.id.navigation_settings -> {
+                binding.toolbar.title = item.title
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_container, ProfileFragment())
+                    .commit()
+            }
+            R.id.navigation_about -> {
+                binding.toolbar.title = item.title
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_container, AboutFragment())
+                    .commit()
+            }
+        }
+        closeDrawer()
+        return true
     }
 
 }

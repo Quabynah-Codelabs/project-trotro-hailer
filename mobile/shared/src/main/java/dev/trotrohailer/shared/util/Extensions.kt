@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.data.Passenger
 import dev.trotrohailer.shared.util.Constants.AVAILABLE_DRIVERS
@@ -27,12 +28,10 @@ fun debugger(msg: Any?) = println("TroTro ==> ${msg.toString()}")
 
 fun FirebaseFirestore.passengerDocument(userId: String) = collection(PASSENGERS).document(userId)
 fun FirebaseFirestore.passengers() = collection(PASSENGERS)
-
 fun FirebaseFirestore.driverDocument(userId: String) = collection(DRIVERS).document(userId)
 fun FirebaseFirestore.drivers() = collection(DRIVERS)
 fun FirebaseFirestore.availableDrivers() = collection(AVAILABLE_DRIVERS)
 fun FirebaseFirestore.passengerRequests() = collection(PASSENGER_REQUESTS)
-
 
 fun FragmentActivity.intentTo(
     target: Class<out FragmentActivity>,
@@ -87,3 +86,4 @@ object Constants {
 }
 
 fun Location.toLatLng(): LatLng = LatLng(latitude, longitude)
+fun Location.toGeoPoint(): GeoPoint= GeoPoint(latitude, longitude)
