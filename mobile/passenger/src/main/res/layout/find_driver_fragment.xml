@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:airbnb="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
+    <data />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container"
@@ -35,24 +32,61 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout
+        <!-- <dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/swipe_refresh"
+             airbnb:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+             <androidx.recyclerview.widget.RecyclerView
+                 android:layout_width="0dp"
+                 android:layout_height="0dp"
+                 android:id="@+id/drivers_list"
+                 airbnb:layout_constraintTop_toTopOf="parent"
+                 airbnb:layout_constraintStart_toStartOf="parent"
+                 airbnb:layout_constraintEnd_toEndOf="parent"
+                 tools:itemCount="4"
+                 tools:listitem="@layout/item_driver"
+                 airbnb:layout_constraintBottom_toBottomOf="parent"/>
+
+         </dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/swipe_refresh"
-            airbnb:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:id="@+id/drivers_list"
-                airbnb:layout_constraintTop_toTopOf="parent"
-                airbnb:layout_constraintStart_toStartOf="parent"
-                airbnb:layout_constraintEnd_toEndOf="parent"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_driver"
-                airbnb:layout_constraintBottom_toBottomOf="parent"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/loading_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </dev.trotrohailer.shared.widget.CustomSwipeRefreshLayout>
+                <ProgressBar
+                    android:id="@+id/loading_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_large"
+                    android:indeterminate="true"
+                    android:indeterminateBehavior="cycle"
+                    android:indeterminateTint="@color/warm_blue" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    android:fontFamily="@font/google_sans_medium"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_normal"
+                    android:text="Searching for a nearby driver"
+                    android:textAppearance="?textAppearanceHeadline6" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

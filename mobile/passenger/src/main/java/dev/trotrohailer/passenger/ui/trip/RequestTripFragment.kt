@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,6 +27,7 @@ import dev.trotrohailer.shared.util.location.metrics.MapService
 import dev.trotrohailer.shared.util.visible
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class RequestTripFragment : MainNavigationFragment() {
@@ -41,7 +41,7 @@ class RequestTripFragment : MainNavigationFragment() {
 
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: RequestTripFragmentBinding
-    private lateinit var viewModel: TripViewModel
+    private val viewModel by viewModel<TripViewModel>()
 
     private val geocoder by lazy { Geocoder(requireContext(), Locale.getDefault()) }
 
@@ -55,7 +55,6 @@ class RequestTripFragment : MainNavigationFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TripViewModel::class.java)
 
         mapFragment =
             childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment

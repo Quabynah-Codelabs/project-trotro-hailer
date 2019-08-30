@@ -18,8 +18,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.trotrohailer.shared.data.Driver
 import dev.trotrohailer.shared.data.Passenger
+import dev.trotrohailer.shared.util.Constants.AVAILABLE_DRIVERS
 import dev.trotrohailer.shared.util.Constants.DRIVERS
 import dev.trotrohailer.shared.util.Constants.PASSENGERS
+import dev.trotrohailer.shared.util.Constants.PASSENGER_REQUESTS
 
 fun debugger(msg: Any?) = println("TroTro ==> ${msg.toString()}")
 
@@ -28,6 +30,8 @@ fun FirebaseFirestore.passengers() = collection(PASSENGERS)
 
 fun FirebaseFirestore.driverDocument(userId: String) = collection(DRIVERS).document(userId)
 fun FirebaseFirestore.drivers() = collection(DRIVERS)
+fun FirebaseFirestore.availableDrivers() = collection(AVAILABLE_DRIVERS)
+fun FirebaseFirestore.passengerRequests() = collection(PASSENGER_REQUESTS)
 
 
 fun FragmentActivity.intentTo(
@@ -78,6 +82,8 @@ object Constants {
     const val PASSENGERS = "passengers"
     const val DRIVERS = "drivers"
     const val TRIPS = "trips"
+    const val AVAILABLE_DRIVERS = "available_drivers"
+    const val PASSENGER_REQUESTS = "passenger_requests"
 }
 
 fun Location.toLatLng(): LatLng = LatLng(latitude, longitude)
