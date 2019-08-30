@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.trotrohailer.passenger.BuildConfig
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
@@ -27,6 +28,8 @@ import dev.trotrohailer.shared.util.invisible
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
 import dev.trotrohailer.shared.util.toLatLng
 import dev.trotrohailer.shared.util.visible
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
@@ -101,6 +104,20 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     override fun onStart() {
         super.onStart()
         binding.map.onStart()
+
+        ioScope.launch {
+            delay(850)
+            uiScope.launch {
+                MaterialAlertDialogBuilder(requireContext()).apply {
+                    setTitle("Welcome back to ${getString(R.string.default_app_name_passenger)}")
+                    setMessage("To request a driver, tap the \"Request driver\" button below and click anywhere on the map to set as your destination. It's that easy. Give it a try!")
+                    setPositiveButton("Okay, got it!") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+                    show()
+                }
+            }
+        }
     }
 
     override fun onStop() {

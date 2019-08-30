@@ -58,7 +58,7 @@ public class MyLocationGoogleMap {
             Location location = mLocationProvider.getLastKnownLocation();
             if (googleMap != null && location != null) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 19);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15.0f);
                 googleMap.animateCamera(cameraUpdate, 550, null);
             }
         }

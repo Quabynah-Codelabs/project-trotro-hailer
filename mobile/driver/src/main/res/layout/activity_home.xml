@@ -24,11 +24,13 @@
                 android:fitsSystemWindows="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+
                 <fragment
-                    android:id="@+id/nav_host_fragment"
-                    android:name="dev.trotrohailer.shared.util.DispatchInsetsNavHostFragment"
+                    android:id="@+id/driver_nav_fragment"
+                    android:name="dev.trotrohailer.driver.util.DriverInsetsNavHostFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:tag="@string/default_app_name"
                     app:defaultNavHost="true"
                     app:navGraph="@navigation/driver_nav_graph" />
 

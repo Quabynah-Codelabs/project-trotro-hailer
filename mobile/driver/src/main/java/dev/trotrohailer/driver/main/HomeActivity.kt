@@ -22,8 +22,8 @@ import dev.trotrohailer.shared.widget.NoopWindowInsetsListener
 
 class HomeActivity : BaseTrackingActivity(), NavigationHost {
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var navController: NavController
-    private var navHostFragment: NavHostFragment? = null
+//    private lateinit var navController: NavController
+//    private var navHostFragment: NavHostFragment? = null
     private var currentNavId = NAV_ID_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +41,9 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
         binding.contentContainer.setOnApplyWindowInsetsListener(NoopWindowInsetsListener)
         binding.statusBarScrim.setOnApplyWindowInsetsListener(HeightTopWindowInsetsListener)
 
-        navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
-        navController = findNavController(R.id.nav_host_fragment)
+        /*navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.driver_nav_host_fragment) as NavHostFragment?
+        navController = findNavController(R.id.driver_nav_host_fragment)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentNavId = destination.id
             val isTopLevelDestination = TOP_LEVEL_DESTINATIONS.contains(destination.id)
@@ -60,7 +60,7 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
             val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.navigation_home)
             binding.navView.setCheckedItem(initialNavId) // doesn't trigger listener
             navigateTo(initialNavId)
-        }
+        }*/
     }
 
     override fun locationServicesEnabled() {
@@ -69,12 +69,12 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {
         val appBarConfiguration = AppBarConfiguration(TOP_LEVEL_DESTINATIONS, binding.drawer)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
+        //toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     override fun onUserInteraction() {
         super.onUserInteraction()
-        getCurrentFragment()?.onUserInteraction()
+        //getCurrentFragment()?.onUserInteraction()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -99,7 +99,7 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
         binding.drawer.closeDrawer(GravityCompat.START)
     }
 
-    private fun getCurrentFragment(): MainNavigationFragment? {
+   /* private fun getCurrentFragment(): MainNavigationFragment? {
         return navHostFragment
             ?.childFragmentManager
             ?.primaryNavigationFragment as? MainNavigationFragment
@@ -110,7 +110,7 @@ class HomeActivity : BaseTrackingActivity(), NavigationHost {
             return // user tapped the current item
         }
         navController.navigate(navId)
-    }
+    }*/
 
     companion object {
         /** Key for an int extra defining the initial navigation target. */
