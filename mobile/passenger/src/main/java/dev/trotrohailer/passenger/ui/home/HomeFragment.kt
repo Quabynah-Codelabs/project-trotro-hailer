@@ -1,10 +1,12 @@
 package dev.trotrohailer.passenger.ui.home
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -36,6 +38,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
     private lateinit var binding: HomeFragmentBinding
     private val customMap by lazy { MyLocationGoogleMap(requireContext()) }
     private var map: GoogleMap? = null
+    private var shouldShowMapHelper: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +59,9 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         //binding.map.getMapAsync(this)
         val fragment = childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment
         fragment?.getMapAsync(this)
+
+        shouldShowMapHelper = requireContext().getSharedPreferences("Helper", Context.MODE_PRIVATE)
+            .getBoolean("show_helper", true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,16 +111,27 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         super.onStart()
         binding.map.onStart()
 
-        ioScope.launch {
-            delay(850)
-            uiScope.launch {
-                MaterialAlertDialogBuilder(requireContext()).apply {
-                    setTitle("Welcome back to ${getString(R.string.default_app_name_passenger)}")
-                    setMessage("To request a driver, tap the \"Request driver\" button below and click anywhere on the map to set as your destination. It's that easy. Give it a try!")
-                    setPositiveButton("Okay, got it!") { dialogInterface, _ ->
-                        dialogInterface.dismiss()
+        if (shouldShowMapHelper) {
+            ioScope.launch {
+                delay(1550)
+                uiScope.launch {
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Welcome back to ${getString(R.string.default_app_name_passenger)}")
+                        setMessage("To request a driver, tap the \"Request driver\" button below and click anywhere on the map to set as your destination. It's that easy. Give it a try!")
+                        setPositiveButton("Okay, got it!") { dialogInterface, _ ->
+                            dialogInterface.dismiss()
+                        }
+                        setNegativeButton("Don't show again") { dialogInterface, _ ->
+                            dialogInterface.dismiss()
+                            shouldShowMapHelper = false
+                            requireContext().getSharedPreferences("Helper", Context.MODE_PRIVATE)
+                                .edit {
+                                    putBoolean("show_helper", false)
+                                    apply()
+                                }
+                        }
+                        show()
                     }
-                    show()
                 }
             }
         }
@@ -191,7 +208,7 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
         val lastLocation = customMap.lastLocation
         if (lastLocation != null) {
             pickupLocation = lastLocation.toLatLng()
-            dropoffLocation = LatLng(lastLocation.latitude + 0.0001, lastLocation.longitude)
+            dropoffLocation = LatLng(lastLocation.latitude + 0.0005, lastLocation.longitude)
 
             // Get passenger and update coordinates property
             val passenger = viewModel.passenger.value.apply {
