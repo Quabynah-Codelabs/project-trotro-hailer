@@ -24,12 +24,12 @@
                 android:fitsSystemWindows="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-                <fragment
+               <!-- <fragment
                     android:id="@+id/driver_nav_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:defaultNavHost="true"
-                    app:navGraph="@navigation/driver_nav_graph" />
+                    app:navGraph="@navigation/driver_nav_graph" />-->
 
                 <View
                     android:id="@+id/status_bar_scrim"

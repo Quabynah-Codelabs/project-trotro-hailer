@@ -45,8 +45,6 @@ class FindDriverFragment : MainNavigationFragment() {
         val picLocation = arguments?.get("extra_pickup") as? LatLng
         val picAddress = arguments?.get("extra_pickup_address") as? String
 
-        debugger("Pickup address: $picAddress")
-
         if (desLocation != null && picLocation != null) {
             // Collection reference
             val db: FirebaseFirestore = get()
@@ -95,7 +93,7 @@ class FindDriverFragment : MainNavigationFragment() {
             requireActivity().onBackPressedDispatcher.addCallback(this) {
                 MaterialAlertDialogBuilder(requireContext()).apply {
                     setTitle("Cancel request")
-                    setMessage("Do you wish to cancel your request for a TroTro heading towards $desAddress?")
+                    setMessage("Do you wish to cancel your request for a TroTro heading towards your destination?")
                     setPositiveButton("Yes, cancel") { dialogInterface, _ ->
                         dialogInterface.dismiss()
                         with(GeoFirestore(db.passengerRequests())) {

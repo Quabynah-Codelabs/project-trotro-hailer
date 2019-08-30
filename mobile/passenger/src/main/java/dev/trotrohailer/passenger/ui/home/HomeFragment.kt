@@ -18,6 +18,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import dev.trotrohailer.passenger.BuildConfig
 import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.HomeFragmentBinding
@@ -25,13 +28,11 @@ import dev.trotrohailer.passenger.ui.settings.SettingsViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.toast
 import dev.trotrohailer.shared.data.Coordinate
-import dev.trotrohailer.shared.util.gone
-import dev.trotrohailer.shared.util.invisible
+import dev.trotrohailer.shared.util.*
 import dev.trotrohailer.shared.util.location.MyLocationGoogleMap
-import dev.trotrohailer.shared.util.toLatLng
-import dev.trotrohailer.shared.util.visible
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.imperiumlabs.geofirestore.GeoFirestore
 import org.koin.android.ext.android.get
 
 class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
@@ -266,6 +267,46 @@ class HomeFragment : MainNavigationFragment(), OnMapReadyCallback {
                     )
                 }
             }
+        }
+
+        val db: FirebaseFirestore = get()
+        val auth: FirebaseAuth = get()
+        // Get last trip and navigate to find driver screen
+        with(GeoFirestore(db.passengerRequests())) {
+            getLocation(auth.currentUser?.uid!!, object : GeoFirestore.LocationCallback {
+                override fun onComplete(location: GeoPoint?, exception: Exception?) {
+                    if (location != null) {
+                        debugger("Has pending requests")
+
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            setTitle("Continue previous request")
+                            setMessage("You have an uncancelled request for a TroTro. Do you wish to continue searching or start afresh?")
+                            setPositiveButton("Start over") { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                removeLocation(auth.currentUser?.uid!!)
+                            }
+                            setNegativeButton("Continue") { dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                                findNavController().navigate(
+                                    R.id.navigation_find_driver, bundleOf(
+                                        Pair(
+                                            "extra_destination",
+                                            LatLng(location.latitude, location.longitude)
+                                        ),
+                                        Pair("extra_destination_address", ""),
+                                        Pair(
+                                            "extra_pickup",
+                                            LatLng(location.latitude, location.longitude)
+                                        ),
+                                        Pair("extra_pickup_address", "")
+                                    )
+                                )
+                            }
+                            show()
+                        }
+                    }
+                }
+            })
         }
     }
 

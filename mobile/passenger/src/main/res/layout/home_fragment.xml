@@ -36,7 +36,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/status_bar"
-            app:menu="@menu/home_menu"
             app:title="@string/title_home"
             tools:navigationIcon="@drawable/ic_menu" />
 
