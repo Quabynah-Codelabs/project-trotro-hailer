@@ -1,10 +1,13 @@
 package dev.trotrohailer.driver.main
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -12,8 +15,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.firebase.firestore.GeoPoint
-import dev.trotrohailer.driver.BuildConfig
 import dev.trotrohailer.driver.R
 import dev.trotrohailer.driver.databinding.HomeFragmentBinding
 import dev.trotrohailer.shared.util.debugger
@@ -41,6 +42,33 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             customMap.moveToMyLocation(googleMap)
 
             with(map) {
+                viewModel.getPassengerRequestsAsync(customMap.lastLocation.toGeoPoint()) { docId, geoPoint ->
+                    debugger("Getting location of passengers with request")
+                    // todo: show passenger location
+                }
+
+                isDriverVisible = prefs.getBoolean("key_driver_status", false)
+
+                with(binding.fabStatus)
+                {
+                    setIconResource(if (isDriverVisible) R.drawable.ic_visible else R.drawable.ic_invisible)
+                    text = if (isDriverVisible) "You are live" else "You are offline"
+                }
+
+                // Add action to toggle driver's visibility with the FAB
+                binding.fabStatus.setOnClickListener {
+                    if (isDriverVisible) {
+                        isDriverVisible = false
+                        binding.fabStatus.text = "You are offline"
+                        binding.fabStatus.setIconResource(R.drawable.ic_invisible)
+                    } else {
+                        isDriverVisible = true
+                        binding.fabStatus.text = "You are live"
+                        binding.fabStatus.setIconResource(R.drawable.ic_visible)
+                    }
+                    updatePrefs(isDriverVisible)
+                }
+
                 this.isMyLocationEnabled = true
 
                 map.uiSettings.apply {
@@ -89,39 +117,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mapFragment = childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
-        viewModel.getPassengerRequestsAsync(
-            GeoPoint(
-                BuildConfig.MAP_VIEWPORT_BOUND_NE.latitude,
-                BuildConfig.MAP_VIEWPORT_BOUND_NE.longitude
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            mapFragment.getMapAsync(this)
+        else
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ), RC_LOC
             )
-        ) { docId, geoPoint ->
-            debugger("Getting location of passengers with request")
 
-        }
 
-        isDriverVisible = prefs.getBoolean("key_driver_status", false)
-
-        with(binding.fabStatus)
-        {
-            setIconResource(if (isDriverVisible) R.drawable.ic_visible else R.drawable.ic_invisible)
-            text = if (isDriverVisible) "You are live" else "You are offline"
-        }
-
-        // Add action to toggle driver's visibility with the FAB
-        binding.fabStatus.setOnClickListener {
-            if (isDriverVisible) {
-                isDriverVisible = false
-                binding.fabStatus.text = "You are offline"
-                binding.fabStatus.setIconResource(R.drawable.ic_invisible)
-            } else {
-                isDriverVisible = true
-                binding.fabStatus.text = "You are live"
-                binding.fabStatus.setIconResource(R.drawable.ic_visible)
-            }
-            updatePrefs(isDriverVisible)
-        }
     }
 
     // Update visibility
@@ -131,6 +142,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             putBoolean("key_driver_status", visible)
             apply()
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == RC_LOC && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            mapFragment.getMapAsync(this)
+    }
+
+    companion object {
+        private const val RC_LOC = 7
     }
 
 }

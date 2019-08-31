@@ -60,7 +60,17 @@ class PassengerRepository constructor(
     override suspend fun saveUser(user: Passenger) = withContext(Dispatchers.IO) {
         passengerDao.insert(user)
         try {
-            Tasks.await(db.passengerDocument(user.id).set(user, SetOptions.merge()))
+            db.runTransaction { transaction ->
+                val driverDocument = db.passengerDocument(user.id)
+                val snapshot = transaction.get(driverDocument)
+                if (snapshot.exists()) {
+                    passengerDao.insert(snapshot.toObject(Passenger::class.java) ?: user)
+                } else {
+                    transaction.set(driverDocument, user, SetOptions.merge())
+                    passengerDao.insert(user)
+                }
+                null
+            }
             null
         } catch (e: Exception) {
             debugger(e.localizedMessage)

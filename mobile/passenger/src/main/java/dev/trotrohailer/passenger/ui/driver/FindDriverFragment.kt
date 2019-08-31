@@ -13,10 +13,12 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import dev.trotrohailer.passenger.BuildConfig
+import dev.trotrohailer.passenger.R
 import dev.trotrohailer.passenger.databinding.FindDriverFragmentBinding
 import dev.trotrohailer.passenger.ui.trip.TripViewModel
 import dev.trotrohailer.passenger.util.MainNavigationFragment
 import dev.trotrohailer.passenger.util.toast
+import dev.trotrohailer.shared.util.availableDrivers
 import dev.trotrohailer.shared.util.debugger
 import dev.trotrohailer.shared.util.passengerRequests
 import org.imperiumlabs.geofirestore.GeoFirestore
@@ -81,7 +83,58 @@ class FindDriverFragment : MainNavigationFragment() {
 
                         if (documentSnapshots != null) {
                             debugger("Drivers found: ${documentSnapshots.size}")
-                            // todo: show drivers found
+                            if (documentSnapshots.isEmpty()) {
+                                // show dialog to user
+                               /* MaterialAlertDialogBuilder(requireContext()).apply {
+                                    setTitle("Oops...")
+                                    setMessage("There are no drivers available in your current location. Please try again later")
+                                    setPositiveButton("Okay") { dialogInterface, _ ->
+                                        dialogInterface.dismiss()
+                                        findNavController().popBackStack()
+                                    }
+                                    show()
+                                }*/
+                                GeoFirestore(db.availableDrivers()).getLocation(
+                                        "Pe2PJcbflPUlZ1QQ95KCJ0Q3VHr1", object : GeoFirestore.LocationCallback {
+                                        override fun onComplete(
+                                            location: GeoPoint?,
+                                            exception: Exception?
+                                        ) {
+                                            MaterialAlertDialogBuilder(requireContext()).apply {
+                                                setTitle("Driver found")
+                                                setMessage("You have a driver available. Do you wish to join this TroTro?")
+                                                setPositiveButton("Okay") { dialogInterface, _ ->
+                                                    dialogInterface.dismiss()
+                                                    // todo: join trip
+                                                    toast("You ride has been started successfully")
+                                                    findNavController().popBackStack()
+                                                }
+                                                setNegativeButton("No") { dialogInterface, _ ->
+                                                    dialogInterface.dismiss()
+                                                    findNavController().popBackStack()
+                                                }
+                                                show()
+                                            }
+                                        }
+                                    })
+                            } else {
+                                // Driver has been found
+                                MaterialAlertDialogBuilder(requireContext()).apply {
+                                    setTitle("Driver found")
+                                    setMessage("You have a driver available. Do you wish to join this TroTro?")
+                                    setPositiveButton("Okay") { dialogInterface, _ ->
+                                        dialogInterface.dismiss()
+                                        // todo: join trip
+                                        toast("You ride has been started successfully")
+                                        findNavController().navigate(R.id.navigation_home)
+                                    }
+                                    setNegativeButton("No") { dialogInterface, _ ->
+                                        dialogInterface.dismiss()
+                                        findNavController().popBackStack()
+                                    }
+                                    show()
+                                }
+                            }
                         } else {
                             toast("Could not find available drivers at this time")
                             findNavController().popBackStack()

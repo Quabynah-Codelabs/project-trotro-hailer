@@ -28,7 +28,7 @@ class TripViewModel : ViewModel() {
     ) {
         GeoFirestore(FirebaseFirestore.getInstance().availableDrivers()).getAtLocation(
             geoPoint,
-            0.9,
+            10.0,
             callback
         )
     }

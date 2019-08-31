@@ -59,8 +59,17 @@ class DriverRepository constructor(
 
     override suspend fun saveUser(user: Driver) = withContext(Dispatchers.IO) {
         try {
-            Tasks.await(db.driverDocument(user.id).set(user, SetOptions.merge()))
-            driverDao.insert(user)
+            db.runTransaction { transaction ->
+                val driverDocument = db.driverDocument(user.id)
+                val snapshot = transaction.get(driverDocument)
+                if (snapshot.exists()) {
+                    driverDao.insert(snapshot.toObject(Driver::class.java) ?: user)
+                } else {
+                    transaction.set(driverDocument, user, SetOptions.merge())
+                    driverDao.insert(user)
+                }
+                null
+            }
             null
         } catch (e: Exception) {
             debugger(e.localizedMessage)
